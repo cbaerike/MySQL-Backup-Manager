@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MySQLBackupLibrary;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -30,17 +31,19 @@ namespace MySQLBackupService
         private void CheckUserPathVariable()
         {
             Library library = new Library();
-            string path = Environment.GetEnvironmentVariable("PATH", EnvironmentVariableTarget.Machine);
-            if (path == null)
+            String binLocation = library.GetMySQLBinLocation();
+            if (!String.IsNullOrEmpty(binLocation))
             {
-                Environment.SetEnvironmentVariable("PATH", library.GetMySQLBinLocation(), EnvironmentVariableTarget.Machine);
-                //this.RestartService();
-            }
-            else if (!path.Contains(library.GetMySQLBinLocation()))
-            {
-                path += ";" + library.GetMySQLBinLocation();
-                Environment.SetEnvironmentVariable("PATH", path, EnvironmentVariableTarget.Machine);
-                //this.RestartService();
+                string path = Environment.GetEnvironmentVariable("PATH", EnvironmentVariableTarget.Machine);
+                if (path == null)
+                {
+                    Environment.SetEnvironmentVariable("PATH", library.GetMySQLBinLocation(), EnvironmentVariableTarget.Machine);
+                }
+                else if (!path.Contains(library.GetMySQLBinLocation()))
+                {
+                    path += ";" + library.GetMySQLBinLocation();
+                    Environment.SetEnvironmentVariable("PATH", path, EnvironmentVariableTarget.Machine);
+                }
             }
         }
     }

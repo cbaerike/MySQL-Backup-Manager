@@ -329,7 +329,8 @@ namespace MySQLBackupLibraryTest
         public void GetMySQLBinPathTest()
         {
             Library lib = new Library();
-            Assert.IsTrue(lib.GetMySQLBinLocation().ToLower().Contains("mysql server"));
+            String binLocation = lib.GetMySQLBinLocation();
+            Assert.IsTrue(!String.IsNullOrEmpty(binLocation) && binLocation.ToLower().Contains("bin"));
             lib = null;
         }
     }
