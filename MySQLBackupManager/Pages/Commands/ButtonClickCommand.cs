@@ -26,6 +26,9 @@ namespace MySQLBackupManager.Pages.Commands
             return true;
         }
 
+#pragma warning disable 67
         public event EventHandler CanExecuteChanged;
+#pragma warning restore 67
+
     }
 }

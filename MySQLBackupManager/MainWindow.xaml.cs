@@ -1,5 +1,6 @@
 ﻿using FirstFloor.ModernUI.Presentation;
 using FirstFloor.ModernUI.Windows.Controls;
+using MySQLBackup.Application.Config;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,7 +26,7 @@ namespace MySQLBackupManager
         public MainWindow()
         {
             InitializeComponent();
-
+            new ConfigLocationCreator().CreateConfigLocations();
             //Load the user settings
             this.LoadUserSettings();
         }

@@ -1,4 +1,6 @@
-﻿using MySQLBackupLibrary;
+﻿using MySQLBackup.Application.Backup;
+using MySQLBackup.Application.Config;
+using MySQLBackup.Application.Model;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -22,19 +24,16 @@ namespace MySQLBackupManager.Pages
     /// </summary>
     public partial class RestoreDatabasePage : Page
     {
-        private Library library = null;
-
         public RestoreDatabasePage()
         {
             InitializeComponent();
-            library = new Library();
         }
 
         private void SelectBackupDumpFileButton_Click(object sender, RoutedEventArgs e)
         {
             Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
 
-            dlg.InitialDirectory = library.GetBackupLocation();
+            dlg.InitialDirectory = ConfigurationHandler.GetBackupLocation();
 
             //Set Extension filter and default extension
             dlg.DefaultExt = ".dump";
@@ -59,7 +58,8 @@ namespace MySQLBackupManager.Pages
                     {
                         if (FirstFloor.ModernUI.Windows.Controls.ModernDialog.ShowMessage(string.Format("You are about to restore the database {0} with a backup file. This means that all content in the database will be overwritten, with the information from the backup file. This action can't be undone. Do you want to continue?", dbInfo.DatabaseName), "Proceed with database restore?", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
                         {
-                            library.RestoreDatabase(process, fileName, dbInfo);
+                            BackupHandler backupHandler = new BackupHandler();
+                            backupHandler.RestoreDatabase(process, fileName, dbInfo);
                             FirstFloor.ModernUI.Windows.Controls.ModernDialog.ShowMessage(string.Format("The database {0} has been restored from this backup dump file '{1}'", dbInfo.DatabaseName, fileName), "Success", MessageBoxButton.OK);
                         }
                     }
@@ -97,8 +97,7 @@ namespace MySQLBackupManager.Pages
                     break;
                 }
             }
-
-            return library.RetrieveDatabaseNode(databaseName); ;
+            return new DatabasesHandler().GetDatabaseNode(databaseName);
         }
     }
 }
