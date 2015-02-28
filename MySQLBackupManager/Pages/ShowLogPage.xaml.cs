@@ -1,18 +1,6 @@
-﻿using MySQLBackupLibrary;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MySQLBackup.Application.Logging;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace MySQLBackupManager.Pages
 {
@@ -21,19 +9,19 @@ namespace MySQLBackupManager.Pages
     /// </summary>
     public partial class ShowLogPage : Page
     {
-        private readonly Library library = new Library();
+        private readonly LogHandler logHandler = new LogHandler();
 
         public ShowLogPage()
         {
             InitializeComponent();
 
-            LogTextBox.Text = library.GetLogText().Replace("\n", "");
+            LogTextBox.Text = logHandler.GetLogText().Replace("\n", "");
         }
 
         private void ClearLogButton_Click(object sender, RoutedEventArgs e)
         {
-            library.ClearLog();
-            LogTextBox.Text = library.GetLogText().Replace("\n", "");
+            logHandler.ClearLog();
+            LogTextBox.Text = logHandler.GetLogText().Replace("\n", "");
         }
     }
 }

@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using MySQLBackup.Application.Util;
+using System;
 using System.ComponentModel;
 using System.Configuration.Install;
-using System.Linq;
 using System.ServiceProcess;
-using System.Threading.Tasks;
-using MySQLBackupLibrary;
 
 namespace MySQLBackupService
 {
@@ -21,26 +17,26 @@ namespace MySQLBackupService
 
         void ServiceInstaller_AfterInstall(object sender, InstallEventArgs e)
         {
-            this.CheckUserPathVariable();
-
+            this.CheckSystemPathVariable();
             ServiceController sc = new ServiceController("MySQL Backup Service");
             sc.Start();
         }
 
-        private void CheckUserPathVariable()
+        private void CheckSystemPathVariable()
         {
-            Library library = new Library();
-            string path = Environment.GetEnvironmentVariable("PATH", EnvironmentVariableTarget.Machine);
-            if (path == null)
+            String binLocation = Utilities.RetrieveMySQLInstallationBinPath();
+            if (!String.IsNullOrEmpty(binLocation))
             {
-                Environment.SetEnvironmentVariable("PATH", library.GetMySQLBinLocation(), EnvironmentVariableTarget.Machine);
-                //this.RestartService();
-            }
-            else if (!path.Contains(library.GetMySQLBinLocation()))
-            {
-                path += ";" + library.GetMySQLBinLocation();
-                Environment.SetEnvironmentVariable("PATH", path, EnvironmentVariableTarget.Machine);
-                //this.RestartService();
+                string path = Environment.GetEnvironmentVariable("PATH", EnvironmentVariableTarget.Machine);
+                if (path == null)
+                {
+                    Environment.SetEnvironmentVariable("PATH", Utilities.RetrieveMySQLInstallationBinPath(), EnvironmentVariableTarget.Machine);
+                }
+                else if (!path.Contains(Utilities.RetrieveMySQLInstallationBinPath()))
+                {
+                    path += ";" + Utilities.RetrieveMySQLInstallationBinPath();
+                    Environment.SetEnvironmentVariable("PATH", path, EnvironmentVariableTarget.Machine);
+                }
             }
         }
     }

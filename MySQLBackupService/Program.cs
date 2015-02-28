@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.ServiceProcess;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ServiceProcess;
 
 namespace MySQLBackupService
 {
@@ -14,18 +9,11 @@ namespace MySQLBackupService
         /// </summary>
         static void Main()
         {
-            #if DEBUG
-            MySQLBackupService service = new MySQLBackupService();
-            service.onDebug();
-            System.Threading.Thread.Sleep(System.Threading.Timeout.Infinite);
-            #else
-            ServiceBase[] ServicesToRun;
-            ServicesToRun = new ServiceBase[] 
+            ServiceBase[] ServicesToRun = new ServiceBase[] 
             { 
                 new MySQLBackupService() 
             };
             ServiceBase.Run(ServicesToRun);
-            #endif
         }
     }
 }

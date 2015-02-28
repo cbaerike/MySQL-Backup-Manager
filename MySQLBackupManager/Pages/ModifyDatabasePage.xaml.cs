@@ -1,5 +1,8 @@
 ﻿using FirstFloor.ModernUI.Windows;
-using MySQLBackupLibrary;
+using MySQLBackup.Application.Backup;
+using MySQLBackup.Application.Config;
+using MySQLBackup.Application.Logging;
+using MySQLBackup.Application.Model;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -23,7 +26,7 @@ namespace MySQLBackupManager.Pages
     /// </summary>
     public partial class ModifyDatabasePage : Page, IContent
     {
-        private readonly Library library = new Library();
+        private readonly DatabasesHandler dbHandler = new DatabasesHandler();
 
         private string currentDatabaseName;
         public string CurrentDatabaseName
@@ -75,7 +78,7 @@ namespace MySQLBackupManager.Pages
         {
             if (e.Fragment != "")
             {
-                DatabaseInfo dbInfo = library.RetrieveDatabaseNode(e.Fragment);
+                DatabaseInfo dbInfo = dbHandler.GetDatabaseNode(e.Fragment);
                 if (dbInfo == null)
                 {
                     FirstFloor.ModernUI.Windows.Controls.ModernDialog.ShowMessage("The database requested was not found!", "Not Found", MessageBoxButton.OK);
@@ -107,17 +110,17 @@ namespace MySQLBackupManager.Pages
 
             if (CurrentDatabaseName.ToLower().Equals(CurrentDbInfo.DatabaseName.ToLower()))
             {
-                library.UpdateDatabaseNode(CurrentDbInfo);
+                dbHandler.UpdateDatabaseNode(CurrentDbInfo);
             }
             else
             {
-                library.RemoveDatabaseNode(CurrentDatabaseName);
-                library.InsertDatabaseNode(CurrentDbInfo);
+                dbHandler.RemoveDatabaseNode(CurrentDatabaseName);
+                dbHandler.InsertDatabaseNode(CurrentDbInfo);
             }
 
 
             CurrentDatabaseName = "";
-            library.LogMessage("INFO", string.Format("The database {0} has been successfully modified", CurrentDbInfo.DatabaseName));
+            new LogHandler().LogMessage(LogHandler.MessageType.INFO, string.Format("The database {0} has been successfully modified", CurrentDbInfo.DatabaseName));
             NavigationCommands.GoToPage.Execute(new Uri("/Pages/DatabasesPage.xaml", UriKind.Relative), FirstFloor.ModernUI.Windows.Navigation.NavigationHelper.FindFrame(null, this));
         }
 
@@ -127,33 +130,31 @@ namespace MySQLBackupManager.Pages
 
             if (result.ToString().ToLower().Equals("yes"))
             {
-                library.RemoveDatabaseNode(CurrentDatabaseName);
-                library.LogMessage("INFO", string.Format("The database {0} has been successfully removed", CurrentDatabaseName));
+                dbHandler.RemoveDatabaseNode(CurrentDatabaseName);
+                new LogHandler().LogMessage(LogHandler.MessageType.INFO, string.Format("The database {0} has been successfully removed", CurrentDatabaseName));
                 NavigationCommands.GoToPage.Execute(new Uri("/Pages/DatabasesPage.xaml", UriKind.Relative), FirstFloor.ModernUI.Windows.Navigation.NavigationHelper.FindFrame(null, this));
             }
         }
 
         private void MakeManualBackupButton_Click(object sender, RoutedEventArgs e)
         {
-            Process process = null;
-
             try
             {
-                library.CreateBackup(process, currentDbInfo.DatabaseName, true);
-                FirstFloor.ModernUI.Windows.Controls.ModernDialog.ShowMessage(string.Format("A backup of the database {0} has been created!", CurrentDbInfo.DatabaseName), "Success", MessageBoxButton.OK);
+                BackupHandler backupHandler = new BackupHandler();
+                if (backupHandler.CreateBackup(currentDbInfo.DatabaseName))
+                {
+                    FirstFloor.ModernUI.Windows.Controls.ModernDialog.ShowMessage(string.Format("A backup of the database {0} has been created!", CurrentDbInfo.DatabaseName), "Success", MessageBoxButton.OK);
+                }
+                else
+                {
+                    FirstFloor.ModernUI.Windows.Controls.ModernDialog.ShowMessage(string.Format("The backup of database {0} failed. Please check the log for details", CurrentDbInfo.DatabaseName), "Error", MessageBoxButton.OK);
+                }
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                FirstFloor.ModernUI.Windows.Controls.ModernDialog.ShowMessage(ex.ToString(), "Error", MessageBoxButton.OK);
             }
-            finally
-            {
-                if (process != null)
-                {
-                    process.Close();
-                }
-                CurrentDatabaseName = "";
-            }
+            CurrentDatabaseName = "";
         }
     }
 }

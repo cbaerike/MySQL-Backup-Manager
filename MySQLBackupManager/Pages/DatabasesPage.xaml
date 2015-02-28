@@ -9,8 +9,8 @@
 	Title="Databases" Loaded="Page_Loaded">
 
     <StackPanel Style="{StaticResource ContentRoot}">
-        <TextBlock Text="The databases here is active and ready for being backed up. If you want to modify a database, double click on it's name in the list below." TextWrapping="Wrap" FontWeight="SemiBold" Margin="0,0,0,20"></TextBlock>
-        
+        <TextBlock TextWrapping="Wrap" FontWeight="SemiBold" Margin="0,0,0,20"><Run Text="The databases here "/><Run Text="are scheduled to be"/><Run Text=" backed up. If you want to modify a database, double click"/><Run Text=" "/><Run Text="its name in the list below."/></TextBlock>
+
         <Separator />
         
         <ListBox x:Name="DatabasesListBox" ItemsSource="{Binding Databases}" PreviewMouseDoubleClick="DatabasesListBox_PreviewMouseDoubleClick"/>

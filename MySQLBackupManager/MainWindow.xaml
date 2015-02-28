@@ -32,7 +32,7 @@
         </mui:LinkGroup>
         
         <!-- Settings tab is a title link -->
-        <mui:LinkGroup DisplayName="settings" GroupName="settings">
+        <mui:LinkGroup DisplayName="settings" GroupKey="settings">
             <mui:LinkGroup.Links>
                 <mui:Link DisplayName="Application" Source="/Pages/Settings.xaml" />
             </mui:LinkGroup.Links>

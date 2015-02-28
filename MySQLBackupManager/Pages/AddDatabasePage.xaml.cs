@@ -1,5 +1,5 @@
 ﻿using FirstFloor.ModernUI.Windows.Controls;
-using MySQLBackupLibrary;
+using MySQLBackup.Application.Model;
 using MySQLBackupManager.Pages.Content;
 using MySQLBackupManager.Views;
 using System;

@@ -8,9 +8,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("MySQL Backup Service")]
 [assembly: AssemblyDescription("Automatic backup service of MySQL databases")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Rohwedder Software")]
+[assembly: AssemblyCompany("Cadence IT Solutions Inc.")]
 [assembly: AssemblyProduct("MySQL Backup Service")]
-[assembly: AssemblyCopyright("Copyright © Martin Rohwedder 2013")]
+[assembly: AssemblyCopyright("Copyright © Cadence IT Solutions Inc. 2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -32,5 +32,5 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.3.0.0")]
-[assembly: AssemblyFileVersion("1.3.0.0")]
+[assembly: AssemblyVersion("1.4.0.0")]
+[assembly: AssemblyFileVersion("1.4.0.0")]

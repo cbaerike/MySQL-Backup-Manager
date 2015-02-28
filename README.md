@@ -1,8 +1,8 @@
-# MySQL Backup Manager 1.3 #
+# MySQL Backup Manager 1.4 #
 
-> MySQL Backup Manager is a simple solution, which automates the process of taking dayli backups, of your MySQL databases. The software consists of a Windows service, which handles the automatization of taking backups and cleaning up old backups, and a graphical user interface application which lets the user modify which databases needs backup and other kind of features.
+> MySQL Backup Manager is a simple solution, which automates the process of taking daily MySQL database backups. The software consists of a Windows service, which handles the automatization of taking backups and cleaning up old backups, and a graphical user interface which lets the user modify which databases need backup, and when these backups are scheduled.
 
-To begin use you can download it free from [SourceForge.net](https://sourceforge.net/projects/mysqlbackupmanager/).
+To begin use you can download it free from the Releases page (https://github.com/cbaerike/MySQL-Backup-Manager/releases).
 
 ### Features ###
 
@@ -22,12 +22,14 @@ The MySQL Backup Manager software, have some minimum requirements to be fullfill
 * **Processor:** 1 Ghz
 * **RAM:** 512 MB
 * **HDD:** 15 MB
-* **prerequisites:** MySQL Server installation and .NET framework 4.5 (.net Framework is 'included' in the MySQL Backup Manager Installer)
+* **prerequisites:** MySQL Server installation and .NET framework 4.5 (.net Framework will automatically be installed if it is not found.)
 
 ### Contributing ###
 
 > Since this software is open source, you're free to grab the source and make your own modifications, but this projects is licensed under [Creative Commons 3.0](http://creativecommons.org/licenses/by-nc-sa/3.0/) license, so please respect this.
 
-You can always make your own modifications if needed to, since the software is open source, but I'll recommend that you share your modifications with us here at GitHub, so we can get your modification as part of the main application. If you have ideas to new features or have experienced some bugs, please create an [issue](https://github.com/martin-rohwedder/MySQL-Backup-Manager/issues) about it, and I will take a look at it.
+This project is currently maintained with Visual Studio 2013 Community Edition with the Visual Studio Installer Projects plugin: https://visualstudiogallery.msdn.microsoft.com/9abe329c-9bba-44a1-be59-0fbf6151054d 
 
-&copy; 2013 [Martin Rohwedder](http://www.martinrohwedder.dk)
+You can always make your own modifications if needed to, since the software is open source, but I'll recommend that you share your modifications with us here at GitHub, so we can get your modification as part of the main application. If you have ideas to new features or have experienced some bugs, please create an [issue](https://github.com/cbaerike/MySQL-Backup-Manager/issues) about it, and I will take a look at it.
+
+&copy; 2015 [Cadence IT Solutions Inc.](http://www.cadenceitsolutions.ca)

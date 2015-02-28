@@ -10,9 +10,9 @@ using System.Windows;
 [assembly: AssemblyTitle("MySQL Backup Manager")]
 [assembly: AssemblyDescription("Graphical User Interface Client, providing a simple way to handle backup of the users MySQL databases using the MySQL Backup Service")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Rohwedder Software")]
+[assembly: AssemblyCompany("Cadence IT Solutions Inc.")]
 [assembly: AssemblyProduct("MySQL Backup Manager")]
-[assembly: AssemblyCopyright("Copyright © Martin Rohwedder 2013")]
+[assembly: AssemblyCopyright("Copyright © Cadence IT Solutions Inc. 2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -51,5 +51,5 @@ using System.Windows;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.3.1.0")]
-[assembly: AssemblyFileVersion("1.3.1.0")]
+[assembly: AssemblyVersion("1.4.0.0")]
+[assembly: AssemblyFileVersion("1.4.0.0")]

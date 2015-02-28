@@ -1,4 +1,6 @@
-﻿using MySQLBackupLibrary;
+﻿using MySQLBackup.Application.Config;
+using MySQLBackup.Application.Logging;
+using MySQLBackup.Application.Model;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -10,14 +12,14 @@ namespace MySQLBackupManager.Pages.Content
 {
     class DatabasesViewModel
     {
-        private readonly Library library = new Library();
+        private readonly DatabasesHandler dbHandler = new DatabasesHandler();
         private ObservableCollection<DatabaseInfo> databases = new ObservableCollection<DatabaseInfo>();
 
         public ObservableCollection<DatabaseInfo> Databases
         {
             get
             {
-                foreach (DatabaseInfo dbInfo in library.RetrieveAllDatabaseNodes())
+                foreach (DatabaseInfo dbInfo in dbHandler.GetAllDatabaseNodes())
                 {
                     databases.Add(dbInfo);
                 }
@@ -31,8 +33,8 @@ namespace MySQLBackupManager.Pages.Content
         public void addDatabase(DatabaseInfo dbInfo)
         {
             this.databases.Add(dbInfo);
-            library.InsertDatabaseNode(dbInfo);
-            library.LogMessage("INFO", string.Format("The database {0} is now ready for backup", dbInfo.DatabaseName));
+            dbHandler.InsertDatabaseNode(dbInfo);
+            new LogHandler().LogMessage(LogHandler.MessageType.INFO, string.Format("The database {0} is now ready for backup", dbInfo.DatabaseName));
         }
     }
 }

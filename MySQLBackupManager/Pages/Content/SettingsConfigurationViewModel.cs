@@ -1,18 +1,16 @@
 ﻿using FirstFloor.ModernUI.Presentation;
-using MySQLBackupLibrary;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MySQLBackupManager.Pages.Commands;
+using MySQLBackup.Application.Config;
 
 namespace MySQLBackupManager.Pages.Content
 {
     class SettingsConfigurationViewModel : NotifyPropertyChanged
     {
-        private readonly Library library = new Library();
-
         //Object Variables
         private string backupLocation;
         private int deleteBackupAfterDays;
@@ -29,8 +27,8 @@ namespace MySQLBackupManager.Pages.Content
          */
         private void SyncFromConfiguration()
         {
-            this.backupLocation = library.GetBackupLocation();
-            this.deleteBackupAfterDays = library.GetDeleteBackupsOlderThanDays();
+            this.backupLocation = ConfigurationHandler.GetBackupLocation();
+            this.deleteBackupAfterDays = ConfigurationHandler.GetDeleteBackupsOlderThanDays();
         }
 
         //Properties
@@ -43,7 +41,7 @@ namespace MySQLBackupManager.Pages.Content
                 OnPropertyChanged("BackupLocation");
 
                 //Save the modification in the Configurations File.
-                library.ChangeBackupLocation(this.backupLocation);
+                ConfigurationHandler.SetBackupLocation(this.backupLocation);
             }
         }
 
@@ -56,7 +54,7 @@ namespace MySQLBackupManager.Pages.Content
                 OnPropertyChanged("DeleteBackupAfterDays");
 
                 //Save the modification in the Configurations File.
-                library.ChangeDeleteBackupsOlderThanDays(Convert.ToUInt32(this.deleteBackupAfterDays));
+                ConfigurationHandler.SetDeleteBackupsOlderThanDays(this.deleteBackupAfterDays);
             }
         }
 
