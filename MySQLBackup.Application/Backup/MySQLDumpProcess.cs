@@ -53,7 +53,7 @@ namespace MySQLBackup.Application.Backup
                         string error = process.StandardError.ReadToEnd();
                         if (!ErrorHandler.HasErrorOccured(error, ref this.isServerDown))
                         {
-                            this.WriteBackupFile(dbInfo.DatabaseName, output);
+                            this.WriteBackupFile(dbInfo.Host, dbInfo.DatabaseName, output);
                             success = true;
                             new LogHandler().LogMessage(LogHandler.MessageType.INFO, "Backup created of the database " + dbInfo.DatabaseName);
                         }
@@ -84,9 +84,9 @@ namespace MySQLBackup.Application.Backup
         /// </summary>
         /// <param name="databaseName">Name of the database.</param>
         /// <param name="output">The output.</param>
-        private void WriteBackupFile(string databaseName, string output)
+        private void WriteBackupFile(string hostName, string databaseName, string output)
         {
-            string backupLocation = ConfigurationHandler.GetBackupLocation() + databaseName + @"\";
+            string backupLocation = ConfigurationHandler.GetBackupLocation() + hostName + @"\" + databaseName + @"\";
             if (!Directory.Exists(backupLocation))
             {
                 Directory.CreateDirectory(Path.GetDirectoryName(backupLocation));
