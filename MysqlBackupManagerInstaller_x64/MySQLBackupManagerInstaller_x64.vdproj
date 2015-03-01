@@ -778,7 +778,7 @@
             }
             "{3C67513D-01DD-4637-8A68-80971EB9504F}:_BFF05E8682814D888C78E753C0076052"
             {
-            "DefaultLocation" = "8:[ProgramFilesFolder][ProductName]"
+            "DefaultLocation" = "8:[ProgramFiles64Folder][ProductName]"
             "Name" = "8:#1925"
             "AlwaysCreate" = "11:FALSE"
             "Condition" = "8:"
@@ -816,7 +816,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:MySQL Backup Manager"
         "ProductCode" = "8:{5FE1198F-8790-44EE-855C-26DAD93631FF}"
-        "PackageCode" = "8:{5F37E02F-E168-4422-84D8-F7372C6DAB91}"
+        "PackageCode" = "8:{D393259B-2030-47E5-B550-BFFDD65D1CE5}"
         "UpgradeCode" = "8:{DE6BDF3C-AB89-4A3C-A411-B4CD43BE755A}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
