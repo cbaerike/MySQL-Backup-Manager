@@ -22,24 +22,35 @@ namespace MySQLBackupManager.Views
     /// </summary>
     public partial class DatabasesPage : Page
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DatabasesPage"/> class.
+        /// </summary>
         public DatabasesPage()
         {
             InitializeComponent();
-
             this.DataContext = new DatabasesViewModel();
         }
 
+        /// <summary>
+        /// Handles the Loaded event of the Page control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
             this.DataContext = new DatabasesViewModel();
         }
 
-        private void DatabasesListBox_PreviewMouseDoubleClick(object sender, MouseButtonEventArgs e)
+        /// <summary>
+        /// Handles the MouseDoubleClick event of the DatabasesGrid control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="MouseButtonEventArgs"/> instance containing the event data.</param>
+        private void DatabasesGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            var item = ItemsControl.ContainerFromElement(DatabasesListBox, e.OriginalSource as DependencyObject) as ListBoxItem;
-            if (item != null)
+            var dbInfo = DatabasesGrid.SelectedItem as DatabaseInfo;
+            if (dbInfo != null)
             {
-                DatabaseInfo dbInfo = (DatabaseInfo) item.Content;
                 NavigationCommands.GoToPage.Execute(new Uri("/Pages/ModifyDatabasePage.xaml#" + dbInfo.DatabaseName, UriKind.Relative), FirstFloor.ModernUI.Windows.Navigation.NavigationHelper.FindFrame(null, this));
             }
         }
