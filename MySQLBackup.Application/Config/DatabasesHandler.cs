@@ -8,10 +8,14 @@ namespace MySQLBackup.Application.Config
 {
     public class DatabasesHandler
     {
+        /// <summary>
+        /// Inserts the database node.
+        /// </summary>
+        /// <param name="databaseInfo">The database information.</param>
         public void InsertDatabaseNode(DatabaseInfo databaseInfo)
         {
             XmlDocument document = new XmlDocument();
-            document.Load(Utilities.CONFIGURATION_LOCATION + "Databases.xml");
+            document.Load(ConfigurationHandler.DB_CONFIG_FILE);
 
             //Create the database node
             XmlNode databaseNode = document.CreateNode(XmlNodeType.Element, "Database", null);
@@ -49,16 +53,17 @@ namespace MySQLBackup.Application.Config
             document.DocumentElement.AppendChild(databaseNode);
 
             //Save the Databases file
-            document.Save(Utilities.CONFIGURATION_LOCATION + "Databases.xml");
+            document.Save(ConfigurationHandler.DB_CONFIG_FILE);
         }
 
-        /**
-         * Remove a database node from the Databases.xml file according to the provided database name
-         */
+        /// <summary>
+        /// Remove the given database node.
+        /// </summary>
+        /// <param name="databaseName">Name of the database.</param>
         public void RemoveDatabaseNode(string databaseName)
         {
             XmlDocument document = new XmlDocument();
-            document.Load(Utilities.CONFIGURATION_LOCATION + "Databases.xml");
+            document.Load(ConfigurationHandler.DB_CONFIG_FILE);
 
             //Fetch the database node if present and remove it
             XmlNode databaseNode = document.SelectSingleNode("Databases/Database[@Name='" + databaseName.ToLower() + "']");
@@ -67,19 +72,20 @@ namespace MySQLBackup.Application.Config
                 databaseNode.ParentNode.RemoveChild(databaseNode);
             }
 
-            document.Save(Utilities.CONFIGURATION_LOCATION + "Databases.xml");
+            document.Save(ConfigurationHandler.DB_CONFIG_FILE);
         }
 
-        /**
-         * Fetch a specific database node, as a DatabaseInfo Object. Null is returned if
-         * no matching database node was found
-         */
+        /// <summary>
+        /// Gets the specified database node.
+        /// </summary>
+        /// <param name="databaseName">Name of the database.</param>
+        /// <returns></returns>
         public DatabaseInfo GetDatabaseNode(string databaseName)
         {
             DatabaseInfo dbInfo = null;
 
             XmlDocument document = new XmlDocument();
-            document.Load(Utilities.CONFIGURATION_LOCATION + "Databases.xml");
+            document.Load(ConfigurationHandler.DB_CONFIG_FILE);
 
             //Fetch the database node if present
             XmlNode databaseNode = document.SelectSingleNode("Databases/Database[@Name='" + databaseName.ToLower() + "']");
@@ -103,12 +109,16 @@ namespace MySQLBackup.Application.Config
             return dbInfo;
         }
 
+        /// <summary>
+        /// Gets all database nodes.
+        /// </summary>
+        /// <returns></returns>
         public List<DatabaseInfo> GetAllDatabaseNodes()
         {
             List<DatabaseInfo> databaseList = new List<DatabaseInfo>();
 
             XmlDocument document = new XmlDocument();
-            document.Load(Utilities.CONFIGURATION_LOCATION + "Databases.xml");
+            document.Load(ConfigurationHandler.DB_CONFIG_FILE);
 
             XmlNodeList databaseNodeList = document.SelectNodes("Databases/Database");
             foreach (XmlNode node in databaseNodeList)
@@ -132,9 +142,10 @@ namespace MySQLBackup.Application.Config
             return databaseList;
         }
 
-        /**
-         * Update an existing database node.
-         */
+        /// <summary>
+        /// Updates the database node.
+        /// </summary>
+        /// <param name="dbInfo">The database information.</param>
         public void UpdateDatabaseNode(DatabaseInfo dbInfo)
         {
             this.RemoveDatabaseNode(dbInfo.DatabaseName);
