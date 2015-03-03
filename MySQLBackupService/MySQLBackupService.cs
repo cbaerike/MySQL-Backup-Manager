@@ -10,6 +10,7 @@ namespace MySQLBackupService
     {
         JobHandler jobHandler;
         FileSystemWatcher configFileWatcher;
+        bool rescheduling;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MySQLBackupService"/> class.
@@ -18,6 +19,7 @@ namespace MySQLBackupService
         {
             InitializeComponent();
             jobHandler = new JobHandler();
+            rescheduling = false;
         }
 
         /// <summary>
@@ -43,6 +45,7 @@ namespace MySQLBackupService
             }
             if (null != configFileWatcher)
             {
+                configFileWatcher.EnableRaisingEvents = false;
                 configFileWatcher.Dispose();
             }
             new LogHandler().LogMessage(LogHandler.MessageType.INFO, "The MySQL Backup Service has been stopped.");
@@ -55,7 +58,7 @@ namespace MySQLBackupService
         {
             configFileWatcher = new FileSystemWatcher();
             configFileWatcher.Path = ConfigurationHandler.CONFIGURATION_LOCATION;
-            configFileWatcher.Filter = ConfigurationHandler.DB_CONFIG_FILE;
+            configFileWatcher.Filter = ConfigurationHandler.DB_CONFIG_FILENAME;
             configFileWatcher.IncludeSubdirectories = false;
             configFileWatcher.NotifyFilter = NotifyFilters.LastWrite;
             configFileWatcher.Changed += configFileWatcher_Changed;
@@ -69,11 +72,14 @@ namespace MySQLBackupService
         /// <param name="e">The <see cref="FileSystemEventArgs"/> instance containing the event data.</param>
         private void configFileWatcher_Changed(object sender, FileSystemEventArgs e)
         {
-            if (null != jobHandler)
+            if (null != jobHandler && !rescheduling)
             {
+                rescheduling = true;
+                System.Threading.Thread.Sleep(3000);  //wait 3 seconds, so that the config file is fully updated. This prevents multiple reloads for a single change
                 jobHandler.Shutdown(true);
                 jobHandler.ScheduleJobs();
                 new LogHandler().LogMessage(LogHandler.MessageType.INFO, "MySQL Backup Service: Configuration file change detected. Backups rescheduled.");
+                rescheduling = false;
             }
         }
     }

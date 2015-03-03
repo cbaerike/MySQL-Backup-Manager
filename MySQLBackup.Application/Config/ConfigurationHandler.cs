@@ -16,11 +16,16 @@ namespace MySQLBackup.Application.Config
         /// The configuration file location.
         /// </summary>
         public static readonly string CONFIGURATION_LOCATION = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + @"\MySQLBackup\Configuration\";
-
+        
         /// <summary>
         /// The database config file - this holds the scheduled backups.
         /// </summary>
-        public static readonly string DB_CONFIG_FILE = CONFIGURATION_LOCATION + "Databases.xml";
+        public static readonly string DB_CONFIG_FILENAME = "Databases.xml";
+
+        /// <summary>
+        /// The database config file (including full path) - this holds the scheduled backups.
+        /// </summary>
+        public static readonly string DB_CONFIG_FILE = CONFIGURATION_LOCATION + DB_CONFIG_FILENAME;
 
         /// <summary>
         /// The application config file - this holds general application config settings.
