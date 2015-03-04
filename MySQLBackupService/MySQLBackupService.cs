@@ -1,6 +1,7 @@
 ﻿using MySQLBackup.Application.Config;
 using MySQLBackup.Application.Logging;
 using MySQLBackup.Application.Scheduler;
+using System;
 using System.IO;
 using System.ServiceProcess;
 
@@ -10,7 +11,7 @@ namespace MySQLBackupService
     {
         JobHandler jobHandler;
         FileSystemWatcher configFileWatcher;
-        bool rescheduling;
+        DateTime lastConfigFileChange;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MySQLBackupService"/> class.
@@ -19,7 +20,6 @@ namespace MySQLBackupService
         {
             InitializeComponent();
             jobHandler = new JobHandler();
-            rescheduling = false;
         }
 
         /// <summary>
@@ -30,6 +30,7 @@ namespace MySQLBackupService
         {
             new ConfigLocationCreator().CreateConfigLocations();
             jobHandler.ScheduleJobs();
+            lastConfigFileChange = DateTime.Now;
             CreateConfigFileWatcher();
             new LogHandler().LogMessage(LogHandler.MessageType.INFO, "The MySQL Backup Service has been started.");
         }
@@ -72,14 +73,13 @@ namespace MySQLBackupService
         /// <param name="e">The <see cref="FileSystemEventArgs"/> instance containing the event data.</param>
         private void configFileWatcher_Changed(object sender, FileSystemEventArgs e)
         {
-            if (null != jobHandler && !rescheduling)
+            //only process one config file change every 2 seconds. Otherwise, updating the config file generates multiple reloads.
+            if (null != jobHandler && lastConfigFileChange.AddSeconds(2) < DateTime.Now)
             {
-                rescheduling = true;
-                System.Threading.Thread.Sleep(3000);  //wait 3 seconds, so that the config file is fully updated. This prevents multiple reloads for a single change
                 jobHandler.Shutdown(true);
                 jobHandler.ScheduleJobs();
                 new LogHandler().LogMessage(LogHandler.MessageType.INFO, "MySQL Backup Service: Configuration file change detected. Backups rescheduled.");
-                rescheduling = false;
+                lastConfigFileChange = DateTime.Now;
             }
         }
     }
