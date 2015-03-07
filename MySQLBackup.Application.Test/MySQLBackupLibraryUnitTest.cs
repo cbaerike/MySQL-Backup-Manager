@@ -1,11 +1,10 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using MySQLBackup.Application.Backup;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using MySQLBackup.Application.Config;
+using MySQLBackup.Application.Logging;
+using MySQLBackup.Application.Model;
+using System;
 using System.IO;
 using System.Xml;
-using MySQLBackup.Application.Logging;
-using MySQLBackup.Application.Config;
-using MySQLBackup.Application.Model;
 
 namespace MySQLBackup.ApplicationTest
 {
@@ -267,7 +266,7 @@ namespace MySQLBackup.ApplicationTest
         [TestMethod]
         public void GetMySQLBinPathTest()
         {
-            String binLocation = MySQLBackup.Application.Util.Utilities.RetrieveMySQLInstallationBinPath();
+            String binLocation = ConfigurationHandler.RetrieveMySQLInstallationBinPath();
             Assert.IsTrue(!String.IsNullOrEmpty(binLocation) && binLocation.ToLower().Contains("bin"));
         }
     }

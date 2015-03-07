@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MySQLBackup.Application.Config;
+using System;
 using System.IO;
 
 namespace MySQLBackup.Application.Logging
@@ -16,7 +17,7 @@ namespace MySQLBackup.Application.Logging
             INFO
         };
 
-        private string logFile = MySQLBackup.Application.Util.Utilities.ROOT_LOCATION + "Log.txt";
+        private string logFile = ConfigurationHandler.ROOT_LOCATION + "Log.txt";
 
         /// <summary>
         /// Gets or sets the log location.

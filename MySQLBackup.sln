@@ -1,4 +1,3 @@
-
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.31101.0
@@ -12,6 +11,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MySQLBackup.Application.Test", "MySQLBackup.Application.Test\MySQLBackup.Application.Test.csproj", "{C9B2207E-A861-4EC4-A7D1-59FFF5FE04B6}"
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "MySQLBackupManagerInstaller", "MySQLBackupManagerInstaller\MySQLBackupManagerInstaller.vdproj", "{045E225B-349E-422E-82CC-4134D98712C7}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "MySQLBackupManagerInstaller_x64", "MysqlBackupManagerInstaller_x64\MySQLBackupManagerInstaller_x64.vdproj", "{3FA990E9-0A2D-4522-9C76-C2476C8E4909}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -38,6 +39,10 @@ Global
 		{045E225B-349E-422E-82CC-4134D98712C7}.Debug|Any CPU.ActiveCfg = Debug
 		{045E225B-349E-422E-82CC-4134D98712C7}.Release|Any CPU.ActiveCfg = Release
 		{045E225B-349E-422E-82CC-4134D98712C7}.Release|Any CPU.Build.0 = Release
+		{3FA990E9-0A2D-4522-9C76-C2476C8E4909}.Debug|Any CPU.ActiveCfg = Debug
+		{3FA990E9-0A2D-4522-9C76-C2476C8E4909}.Debug|Any CPU.Build.0 = Debug
+		{3FA990E9-0A2D-4522-9C76-C2476C8E4909}.Release|Any CPU.ActiveCfg = Release
+		{3FA990E9-0A2D-4522-9C76-C2476C8E4909}.Release|Any CPU.Build.0 = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -62,6 +62,15 @@ namespace MySQLBackup.Application.Scheduler
         }
 
         /// <summary>
+        /// Shuts down the scheduler.
+        /// </summary>
+        /// <param name="waitForJobsToComplete">if set to <c>true</c>, waits until all currently executing jobs are completed.</param>
+        public void Shutdown(Boolean waitForJobsToComplete)
+        {
+            scheduler.Shutdown(waitForJobsToComplete);
+        }
+
+        /// <summary>
         /// Shuts down the scheduler. Does not wait for jobs to complete.
         /// </summary>
         public void Dispose()
