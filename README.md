@@ -1,22 +1,25 @@
 # MySQL Backup Manager 1.4.1 #
 
-> MySQL Backup Manager is a simple solution, which automates the process of taking daily MySQL database backups. The software consists of a Windows service, which handles the automatization of taking backups and cleaning up old backups, and a graphical user interface which lets the user modify which databases need backup, and when these backups are scheduled.
+> MySQL Backup Manager automates the process of taking daily MySQL database backups. The software consists of a Windows service, which handles the creation and cleaning up of backups, and a UI to modify which databases are backed up, and when these backups are scheduled.
 
-To begin use you can download it free from the Releases page (https://github.com/cbaerike/MySQL-Backup-Manager/releases).
+Installer packages are available on the [Releases](https://github.com/cbaerike/MySQL-Backup-Manager/releases) page.
 
 ### Features ###
 
 - Easy installation and setup of databases
-- Automatic backup of databases, by using a windows service
+- Scheduled backup of databases, by using a windows service
 - Manual backup of databases, for instant backups
 - Easy restoring of databases, from MySQL Backup Manager dump files
 - Automatic cleanup of old database backups
-- Good logging of user behavior and errors occured
-- It's open source and you can with ease contribute with changes to the application
+- Comprehensive activity and error log
+- It's open source - contributions welcome!
+
+### Updating ###
+
+- If you're updating from version 1.3.0 or earlier, please uninstall the MySQL Backup Managet before running the install. Your settings and existing backups will remain intact.
+- After version 1.4.0, the installer will automatically take care of the update. Your settings and existing backups will remain intact. 
 
 ### System Requirements ###
-
-The MySQL Backup Manager software, have some minimum requirements to be fullfilled, to run properly.
 
 * **OS:** Windows 8, Windows 7, Windows Vista, Windows Server 2012, Windows Server 2008
 * **Processor:** 1 Ghz
@@ -26,10 +29,10 @@ The MySQL Backup Manager software, have some minimum requirements to be fullfill
 
 ### Contributing ###
 
-> Since this software is open source, you're free to grab the source and make your own modifications, but this projects is licensed under [Creative Commons 3.0](http://creativecommons.org/licenses/by-nc-sa/3.0/) license, so please respect this.
+> Since this software is open source, you're free to grab the source and make your own modifications. This project is licensed under [Creative Commons 3.0](http://creativecommons.org/licenses/by-nc-sa/3.0/) license.
 
 This project is currently maintained with Visual Studio 2013 Community Edition with the Visual Studio Installer Projects plugin: https://visualstudiogallery.msdn.microsoft.com/9abe329c-9bba-44a1-be59-0fbf6151054d 
 
-You can always make your own modifications if needed to, since the software is open source, but I'll recommend that you share your modifications with us here at GitHub, so we can get your modification as part of the main application. If you have ideas to new features or have experienced some bugs, please create an [issue](https://github.com/cbaerike/MySQL-Backup-Manager/issues) about it, and I will take a look at it.
+You can always make your own modifications if needed, but I'll recommend that you share your modifications with us here at GitHub, so we can get your modification as part of the main application. If you have ideas to new features or have experienced any issues, please open a [ticket](https://github.com/cbaerike/MySQL-Backup-Manager/issues), and I'll have a look.
 
 &copy; 2015 [Cadence IT Solutions Inc.](http://www.cadenceitsolutions.ca)
