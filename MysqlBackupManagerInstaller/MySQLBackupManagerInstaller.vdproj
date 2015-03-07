@@ -816,7 +816,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:MySQL Backup Manager"
         "ProductCode" = "8:{D7C47809-FF49-428B-A873-7F9CC5752AA6}"
-        "PackageCode" = "8:{842CAC3D-E3EA-4378-A0C5-5F09ED01F41C}"
+        "PackageCode" = "8:{5A510471-894F-4ED1-920B-97A42E63B84D}"
         "UpgradeCode" = "8:{DE6BDF3C-AB89-4A3C-A411-B4CD43BE755A}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
@@ -839,7 +839,7 @@
         "UseSystemSearchPath" = "11:TRUE"
         "TargetPlatform" = "3:0"
         "PreBuildEvent" = "8:"
-        "PostBuildEvent" = "8:"
+        "PostBuildEvent" = "8:cscript \"$(ProjectDir)..\\packages\\wirunsql.vbs\" \"$(BuiltOuputPath)\" \"INSERT INTO ServiceControl (ServiceControl,Name,Event,Arguments,Wait,Component_) VALUES ('MySQL Backup Service','MySQL Backup Service',170,null,null,'C__D8AAA435A263227796C2128F89BC1216')\""
         "RunPostBuildEvent" = "3:0"
         }
         "Registry"
