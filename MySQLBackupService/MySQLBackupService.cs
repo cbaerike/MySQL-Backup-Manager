@@ -57,13 +57,20 @@ namespace MySQLBackupService
         /// </summary>
         private void CreateConfigFileWatcher()
         {
-            configFileWatcher = new FileSystemWatcher();
-            configFileWatcher.Path = ConfigurationHandler.CONFIGURATION_LOCATION;
-            configFileWatcher.Filter = ConfigurationHandler.DB_CONFIG_FILENAME;
-            configFileWatcher.IncludeSubdirectories = false;
-            configFileWatcher.NotifyFilter = NotifyFilters.LastWrite;
-            configFileWatcher.Changed += configFileWatcher_Changed;
-            configFileWatcher.EnableRaisingEvents = true;
+            try
+            {
+                configFileWatcher = new FileSystemWatcher();
+                configFileWatcher.Path = ConfigurationHandler.CONFIGURATION_LOCATION;
+                configFileWatcher.Filter = ConfigurationHandler.DB_CONFIG_FILENAME;
+                configFileWatcher.IncludeSubdirectories = false;
+                configFileWatcher.NotifyFilter = NotifyFilters.LastWrite;
+                configFileWatcher.Changed += configFileWatcher_Changed;
+                configFileWatcher.EnableRaisingEvents = true;
+            }
+            catch (Exception ex)
+            {
+                new LogHandler().LogMessage(LogHandler.MessageType.ERROR, ex.ToString());
+            }
         }
 
         /// <summary>
