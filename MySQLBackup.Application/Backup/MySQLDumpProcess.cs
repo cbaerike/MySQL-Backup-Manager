@@ -42,7 +42,7 @@ namespace MySQLBackup.Application.Backup
                     psi.RedirectStandardOutput = true;
                     psi.RedirectStandardError = true;
                     psi.StandardOutputEncoding = Encoding.UTF8;
-                    psi.Arguments = string.Format(@"-u{0} -p{1} -h{2} --add-drop-database --add-drop-table --add-locks --comments --create-options --dump-date --lock-tables --databases ""{3}""", dbInfo.User, dbInfo.Password, dbInfo.Host, dbInfo.DatabaseName);
+                    psi.Arguments = string.Format(@"-u{0} -p{1} -h{2} -P{3} --add-drop-database --add-drop-table --add-locks --comments --create-options --dump-date --lock-tables --databases ""{4}""", dbInfo.User, dbInfo.Password, dbInfo.HostNoPort, dbInfo.Port, dbInfo.DatabaseName);
                     psi.UseShellExecute = false;
                     psi.CreateNoWindow = true;
 
@@ -53,7 +53,7 @@ namespace MySQLBackup.Application.Backup
                         string error = process.StandardError.ReadToEnd();
                         if (!ErrorHandler.HasErrorOccured(error, ref this.isServerDown))
                         {
-                            this.WriteBackupFile(dbInfo.Host, dbInfo.DatabaseName, output);
+                            this.WriteBackupFile(dbInfo.HostNoPort, dbInfo.DatabaseName, output);
                             success = true;
                             new LogHandler().LogMessage(LogHandler.MessageType.INFO, "Backup created of the database " + dbInfo.DatabaseName);
                         }
