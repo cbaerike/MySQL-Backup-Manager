@@ -28,7 +28,7 @@ namespace MySQLBackup.Application.Backup
             psi.RedirectStandardOutput = true;
             psi.RedirectStandardError = true;
             psi.StandardOutputEncoding = Encoding.UTF8;
-            psi.Arguments = string.Format(@"-u {0} -p{1} -h {2}", dbInfo.User, dbInfo.Password, dbInfo.Host);
+            psi.Arguments = string.Format(@"-u {0} -p{1} -h {2} -P{3}", dbInfo.User, dbInfo.Password, dbInfo.HostNoPort, dbInfo.Port);
             psi.UseShellExecute = false;
             psi.CreateNoWindow = true;
 
