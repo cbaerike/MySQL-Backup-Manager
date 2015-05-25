@@ -12,9 +12,12 @@ namespace MySQLBackupManager.Pages.Content
 {
     class DatabasesViewModel
     {
-        private readonly DatabasesHandler dbHandler = new DatabasesHandler();
+        private readonly DatabasesXmlHandler dbHandler = new DatabasesXmlHandler();
         private ObservableCollection<DatabaseInfo> databases = new ObservableCollection<DatabaseInfo>();
 
+        /// <summary>
+        /// Gets the databases.
+        /// </summary>
         public ObservableCollection<DatabaseInfo> Databases
         {
             get
@@ -27,9 +30,10 @@ namespace MySQLBackupManager.Pages.Content
             }
         }
 
-        /**
-         * Add a Database Info object to the collection
-         */
+        /// <summary>
+        /// Adds a database node to the list.
+        /// </summary>
+        /// <param name="dbInfo">The database information.</param>
         public void addDatabase(DatabaseInfo dbInfo)
         {
             this.databases.Add(dbInfo);

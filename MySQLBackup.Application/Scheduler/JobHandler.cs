@@ -23,7 +23,7 @@ namespace MySQLBackup.Application.Scheduler
         public void ScheduleJobs()
         {
             LogHandler logHandler = new LogHandler();
-            List<DatabaseInfo> dbNodes = new DatabasesHandler().GetAllDatabaseNodes();
+            List<DatabaseInfo> dbNodes = new DatabasesXmlHandler().GetAllDatabaseNodes();
             if (0 == dbNodes.Count)
             {
                 logHandler.LogMessage(LogHandler.MessageType.WARNING, "MySQL Backup Scheduler - No database nodes found. No backups will be scheduled.");
@@ -37,7 +37,7 @@ namespace MySQLBackup.Application.Scheduler
                     //Schedule backup job
                     IJobDetail backupJobDetail = JobBuilder.Create<CreateBackupJob>()
                         .WithIdentity(dbNode.DatabaseName + "_Job", "Backup")
-                        .UsingJobData(CreateBackupJob.Properties.DatabaseName.ToString(), dbNode.DatabaseName)
+                        .UsingJobData(CreateBackupJob.Properties.DatabaseId.ToString(), dbNode.ID.ToString())
                         .Build();
                     ITrigger backupJobTrigger = TriggerBuilder.Create()
                         .WithIdentity(dbNode.DatabaseName + "_Trigger", "Backup")

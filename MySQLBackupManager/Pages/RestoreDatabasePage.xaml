@@ -4,20 +4,43 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       mc:Ignorable="d" 
-      d:DesignHeight="500" d:DesignWidth="500"
+      d:DesignHeight="500" d:DesignWidth="600"
 	Title="Restore A Database">
 
     <StackPanel Style="{StaticResource ContentRoot}">
+
         <TextBlock Style="{StaticResource Heading2}" Text="DATABASE RESTORE" Margin="0,0,0,20"></TextBlock>
 
-        <StackPanel Orientation="Vertical" Width="500" HorizontalAlignment="Left">
+        <StackPanel Orientation="Vertical" Width="600" HorizontalAlignment="Left">
 
             <TextBlock TextWrapping="Wrap" Margin="0,0,0,10"><Run Text="Here you can restore a database from one of your backup files. The process of restoring a database is very simple. You click the button 'Restore Database' below, and then "/><Run Text="select "/><Run Text="the backup dump file, and the application will then handle the rest automatically."/></TextBlock>
 
             <TextBlock TextWrapping="Wrap" Margin="0,0,0,20"><Bold><Run Text="NOTICE:"/></Bold><Run Text=" Restoring a database will delete the database from MySQL, and replace it with the data created in the selected backup dump file."/></TextBlock>
 
-            <Button x:Name="SelectBackupDumpFileButton" Content="Do a Database Restore" Click="SelectBackupDumpFileButton_Click"></Button>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"></ColumnDefinition>
+                    <ColumnDefinition MinWidth="260"></ColumnDefinition>
+                    <ColumnDefinition MinWidth="160"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
 
+                <Label Grid.Row="0" Grid.Column="0" Target="{Binding ElementName=SelectDatabase}" Content="Host and Database:"/>
+                <ComboBox Grid.Row="0" Grid.Column="1" Margin="10,0" Name="SelectDatabase" ItemsSource="{Binding Databases}" />
+
+                <Label Grid.Row="1" Grid.Column="0" Target="{Binding TextRestoreFile}" Content="File to restore:"/>
+                <TextBox Grid.Row="1" Grid.Column="1" Margin="10,10" Name="TextRestoreFile"/>
+                <Button Grid.Row="1" Grid.Column="2" Margin="10,10" x:Name="SelectBackupDumpFileButton" Content="Select Dump File" Click="SelectBackupDumpFileButton_Click"></Button>
+
+                <Button Grid.Row="2" Grid.Column="1" Margin="10,10" x:Name="RestoreDatabaseButton" Content="Restore the database" Click="RestoreDatabaseButton_Click"></Button>
+            </Grid>
         </StackPanel>
     </StackPanel>
 </Page>

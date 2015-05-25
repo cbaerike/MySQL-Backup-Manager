@@ -12,6 +12,11 @@ namespace MySQLBackup.Application.Model
         private int startTimeMinute;
 
         /// <summary>
+        /// Gets or sets the database identifier.
+        /// </summary>
+        public Guid ID { get; set; }
+
+        /// <summary>
         /// Gets or sets the host, including the port number if one is set.
         /// </summary>
         public string Host { get; set; }

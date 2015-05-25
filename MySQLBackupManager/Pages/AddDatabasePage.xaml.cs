@@ -25,16 +25,25 @@ namespace MySQLBackupManager.Pages
     /// </summary>
     public partial class AddDatabasePage : Page
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AddDatabasePage"/> class.
+        /// </summary>
         public AddDatabasePage()
         {
             InitializeComponent();
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        /// <summary>
+        /// Handles the Click event of the BtnAddDatabase control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
+        private void BtnAddDatabase_Click(object sender, RoutedEventArgs e)
         {
             DatabasesViewModel databasesViewModel = Globals.DatabasesViewModel;
 
             DatabaseInfo dbInfo = new DatabaseInfo();
+            dbInfo.ID = Guid.NewGuid();
             dbInfo.Host = hostTextBox.Text;
             dbInfo.DatabaseName = databaseTextBox.Text;
             dbInfo.User = userTextBox.Text;
@@ -53,12 +62,16 @@ namespace MySQLBackupManager.Pages
             NavigationCommands.GoToPage.Execute(new Uri("/Pages/DatabasesPage.xaml", UriKind.Relative), FirstFloor.ModernUI.Windows.Navigation.NavigationHelper.FindFrame(null, this));
         }
 
+        /// <summary>
+        /// Resets the textbox fields.
+        /// </summary>
         private void ResetTextBoxfields()
         {
             hostTextBox.Text = "";
             databaseTextBox.Text = "";
             userTextBox.Text = "";
             passwordTextBox.Password = "";
+            startTime.Text = "00:00";
         }
     }
 }

@@ -28,7 +28,7 @@ namespace MySQLBackupService
         /// <param name="args">Data passed by the start command.</param>
         protected override void OnStart(string[] args)
         {
-            new ConfigLocationCreator().CreateConfigLocations();
+            new ConfigurationHandler().InitializeConfigFiles();
             jobHandler.ScheduleJobs();
             lastConfigFileChange = DateTime.Now;
             CreateConfigFileWatcher();

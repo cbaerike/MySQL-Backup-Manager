@@ -26,10 +26,10 @@ namespace MySQLBackup.Application.Backup
         /// Processes MySQL dump for the given database.
         /// </summary>
         /// <param name="databaseName">Name of the database.</param>
-        public bool ProcessMySqlDump(string databaseName)
+        public bool ProcessMySqlDump(Guid databaseId)
         {
             Boolean success = false;
-            DatabaseInfo dbInfo = new DatabasesHandler().GetDatabaseNode(databaseName);
+            DatabaseInfo dbInfo = new DatabasesXmlHandler().GetDatabaseNode(databaseId);
             if (dbInfo != null)
             {
                 System.Threading.Thread.Sleep(1000);   //Let Application Sleep for 1 second, preventing multiple backup executions of the same database.
@@ -86,7 +86,7 @@ namespace MySQLBackup.Application.Backup
         /// <param name="output">The output.</param>
         private void WriteBackupFile(string hostName, string databaseName, string output)
         {
-            string backupLocation = ConfigurationHandler.GetBackupLocation() + hostName + @"\" + databaseName + @"\";
+            string backupLocation = ConfigurationXmlHandler.GetBackupLocation() + hostName + @"\" + databaseName + @"\";
             if (!Directory.Exists(backupLocation))
             {
                 Directory.CreateDirectory(Path.GetDirectoryName(backupLocation));

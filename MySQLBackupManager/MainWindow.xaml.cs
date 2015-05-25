@@ -16,7 +16,7 @@ namespace MySQLBackupManager
         {
             InitializeComponent();
             BackupManagerMainWindow.Title += " " + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString(3);
-            new ConfigLocationCreator().CreateConfigLocations();
+            new ConfigurationHandler().InitializeConfigFiles();
             //Load the user settings
             this.LoadUserSettings();
         }

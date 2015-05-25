@@ -51,7 +51,7 @@ namespace MySQLBackupManager.Views
             var dbInfo = DatabasesGrid.SelectedItem as DatabaseInfo;
             if (dbInfo != null)
             {
-                NavigationCommands.GoToPage.Execute(new Uri("/Pages/ModifyDatabasePage.xaml#" + dbInfo.DatabaseName, UriKind.Relative), FirstFloor.ModernUI.Windows.Navigation.NavigationHelper.FindFrame(null, this));
+                NavigationCommands.GoToPage.Execute(new Uri("/Pages/ModifyDatabasePage.xaml#" + dbInfo.ID.ToString(), UriKind.Relative), FirstFloor.ModernUI.Windows.Navigation.NavigationHelper.FindFrame(null, this));
             }
         }
     }
