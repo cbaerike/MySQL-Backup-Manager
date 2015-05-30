@@ -4,7 +4,9 @@ using MySQLBackup.Application.Logging;
 using MySQLBackup.Application.Model;
 using System;
 using System.IO;
+using System.Linq;
 using System.Xml;
+using System.Xml.Linq;
 
 namespace MySQLBackup.ApplicationTest
 {
@@ -60,6 +62,7 @@ namespace MySQLBackup.ApplicationTest
         {
             DatabasesXmlHandler dbHandler = new DatabasesXmlHandler();
             DatabaseInfo dbInfo = new DatabaseInfo();
+            dbInfo.ID = Guid.NewGuid();
             dbInfo.Host = "localhost";
             dbInfo.User = "test";
             dbInfo.Password = "secret";
@@ -69,16 +72,16 @@ namespace MySQLBackup.ApplicationTest
 
             dbHandler.InsertDatabaseNode(dbInfo);
 
-            XmlDocument document = new XmlDocument();
-            document.Load(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + @"\MySQLBackup\Configuration\Databases.xml");
-            XmlNode databaseNode = document.SelectSingleNode("Databases/Database[@Name='test_database']");
-            string databaseNameAttr = databaseNode.Attributes["Name"].Value;
+            XElement document = XElement.Load(ConfigurationHandler.DB_CONFIG_FILE);
+            var databaseNode = document
+                .Elements("Database")
+                .FirstOrDefault(x => x.Attribute("ID").Value == dbInfo.ID.ToString());
+            string databaseName = databaseNode.Element("Name").Value;
 
-            Assert.AreEqual("test_database", databaseNameAttr);
+            Assert.AreEqual("test_database", databaseName);
 
             //remove the database node we just created
-            databaseNode.ParentNode.RemoveChild(databaseNode);
-            document.Save(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + @"\MySQLBackup\Configuration\Databases.xml");
+            dbHandler.RemoveDatabaseNode(dbInfo.ID);
         }
 
         [TestMethod]
@@ -97,9 +100,10 @@ namespace MySQLBackup.ApplicationTest
             dbHandler.InsertDatabaseNode(dbInfo);
             dbHandler.RemoveDatabaseNode(dbInfo.ID);
 
-            XmlDocument document = new XmlDocument();
-            document.Load(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + @"\MySQLBackup\Configuration\Databases.xml");
-            XmlNode databaseNode = document.SelectSingleNode("Databases/Database[@Name='" + dbInfo.DatabaseName + "']");
+            XElement document = XElement.Load(ConfigurationHandler.DB_CONFIG_FILE);
+            var databaseNode = document
+                .Elements("Database")
+                .FirstOrDefault(x => x.Attribute("ID").Value == dbInfo.ID.ToString());
 
             Assert.IsNull(databaseNode);
         }
@@ -121,9 +125,9 @@ namespace MySQLBackup.ApplicationTest
 
             DatabaseInfo dbInfo2 = dbHandler.GetDatabaseNode(dbInfo.ID);
 
-            Assert.AreEqual("testdatabase", dbInfo2.DatabaseName);
+            Assert.AreEqual("TestDatabase", dbInfo2.DatabaseName);
 
-            dbHandler.RemoveDatabaseNode(dbInfo2.ID);
+            dbHandler.RemoveDatabaseNode(dbInfo.ID);
         }
 
         [TestMethod]
@@ -147,6 +151,8 @@ namespace MySQLBackup.ApplicationTest
 
             dbHandler.UpdateDatabaseNode(dbInfo);
 
+            dbInfo = dbHandler.GetDatabaseNode(dbInfo.ID)
+;
             Assert.AreEqual("22:59:00", dbInfo.StartTime.ToString());
 
             dbHandler.RemoveDatabaseNode(dbInfo.ID);
@@ -198,7 +204,7 @@ namespace MySQLBackup.ApplicationTest
             LogHandler logHandler = new LogHandler();
             logHandler.ClearLog();
 
-            StreamReader reader = new StreamReader(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + @"\MySQLBackup\Log.txt");
+            StreamReader reader = new StreamReader(ConfigurationHandler.ROOT_LOCATION + "Log.txt");
             string output = reader.ReadLine();
             reader.Close();
 
