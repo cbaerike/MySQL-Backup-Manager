@@ -2,6 +2,7 @@
 using MySQLBackup.Application.Util;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Xml.Linq;
 
@@ -15,26 +16,72 @@ namespace MySQLBackup.Application.Config
         /// <summary>
         /// The current version of the database config file.
         /// </summary>
-        private const string fileVersion = "1.1";
+        private const string currentFileVersion = "1.1";
 
-        #region File methods
+        #region File creation and update
         /// <summary>
         /// Create the Databases.xml file with default values.
         /// </summary>
-        internal static void CreateNewDatabasesFile()
+        internal void CreateNewDatabasesFile()
         {
-            XElement document = new XElement("Databases", new XAttribute("Version", fileVersion));
+            XElement document = new XElement("Databases", new XAttribute("Version", currentFileVersion));
             document.Save(ConfigurationHandler.DB_CONFIG_FILE);
         }
 
         /// <summary>
         /// Updates the databases file to the latest version.
         /// </summary>
-        internal static void UpdateDatabasesFileVersion()
+        internal void UpdateDatabasesFileVersion()
         {
-#warning TODO!
+            try
+            {
+                XElement document = XElement.Load(ConfigurationHandler.DB_CONFIG_FILE);
+                string fileVersion = (null == document.Attribute("Version") ? "1.0" : document.Attribute("Version").Value);
+                switch (fileVersion)
+                {
+                    case "1.0":
+                        //Make a backup copy
+                        File.Copy(ConfigurationHandler.DB_CONFIG_FILE, ConfigurationHandler.DB_CONFIG_FILE.Replace(".xml", ".1.0.xml"), true);
+                        //Read the old file contents into memory
+                        List<DatabaseInfo> databaseList = new List<DatabaseInfo>();
+                        var databaseNodeList = document.Elements("Database");
+                        foreach (var databaseNode in databaseNodeList)
+                        {
+                            DatabaseInfo dbInfo = new DatabaseInfo();
+                            dbInfo.ID = Guid.NewGuid();
+                            dbInfo.DatabaseName = databaseNode.Attribute("Name").Value;
+                            dbInfo.Host = databaseNode.Element("Host").Value;
+                            dbInfo.User = databaseNode.Element("User").Value;
+                            dbInfo.Password = EncryptionHelper.Decrypt(databaseNode.Element("Password").Value);
+                            XElement backupSettingsNode = databaseNode.Element("BackupSettings");
+                            string startTime = backupSettingsNode.Element("StartTime").Value;
+                            string[] timeSplit = startTime.Split(':');
+                            dbInfo.StartTimeHour = Convert.ToInt32(timeSplit[0]);
+                            dbInfo.StartTimeMinute = Convert.ToInt32(timeSplit[1]);
+                            databaseList.Add(dbInfo);
+                        }
+                        //Then delete the old file and create a new one.
+                        File.Delete(ConfigurationHandler.DB_CONFIG_FILE);
+                        CreateNewDatabasesFile();
+                        foreach (DatabaseInfo dbInfo in databaseList)
+                        {
+                            this.InsertDatabaseNode(dbInfo);
+                        }
+                        break;
+                    case "1.1":
+                    default://Nothing to do. This is the latest version.
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                Logging.LogHandler logHandler = new Logging.LogHandler();
+                logHandler.LogMessage(Logging.LogHandler.MessageType.ERROR, "Error updating database config file: " + ex.ToString());
+            }
         }
         #endregion
+
+        #region Database node manipulation
         /// <summary>
         /// Inserts the database node.
         /// </summary>
@@ -132,16 +179,14 @@ namespace MySQLBackup.Application.Config
                 dbInfo.Host = databaseNode.Element("Host").Value;
                 dbInfo.User = databaseNode.Element("User").Value;
                 dbInfo.Password = EncryptionHelper.Decrypt(databaseNode.Element("Password").Value);
-
                 XElement backupSettingsNode = databaseNode.Element("BackupSettings");
-
                 string startTime = backupSettingsNode.Element("StartTime").Value;
                 string[] timeSplit = startTime.Split(':');
                 dbInfo.StartTimeHour = Convert.ToInt32(timeSplit[0]);
                 dbInfo.StartTimeMinute = Convert.ToInt32(timeSplit[1]);
             }
-
             return dbInfo;
         }
+        #endregion
     }
 }

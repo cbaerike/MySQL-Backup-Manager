@@ -47,8 +47,9 @@ namespace MySQLBackup.Application.Config
             if (!Directory.Exists(ConfigurationHandler.CONFIGURATION_LOCATION)) { Directory.CreateDirectory(Path.GetDirectoryName(ConfigurationHandler.CONFIGURATION_LOCATION)); }
             if (!Directory.Exists(ConfigurationHandler.DEFAULT_BACKUP_LOCATION)) { Directory.CreateDirectory(Path.GetDirectoryName(ConfigurationHandler.DEFAULT_BACKUP_LOCATION)); }
             if (!File.Exists(ConfigurationHandler.APP_CONFIG_FILE)) { ConfigurationXmlHandler.CreateNewConfigurationFile(); }
-            if (!File.Exists(ConfigurationHandler.DB_CONFIG_FILE)) { DatabasesXmlHandler.CreateNewDatabasesFile(); }
-            DatabasesXmlHandler.UpdateDatabasesFileVersion();
+            DatabasesXmlHandler dbHandler = new DatabasesXmlHandler();
+            if (!File.Exists(ConfigurationHandler.DB_CONFIG_FILE)) { dbHandler.CreateNewDatabasesFile(); }
+            dbHandler.UpdateDatabasesFileVersion();
         }
 
         /// <summary>
