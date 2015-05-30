@@ -13,9 +13,12 @@
 
         <StackPanel Orientation="Vertical" Width="600" HorizontalAlignment="Left">
 
-            <TextBlock TextWrapping="Wrap" Margin="0,0,0,10"><Run Text="Here you can restore a database from one of your backup files. The process of restoring a database is very simple. You click the button 'Restore Database' below, and then "/><Run Text="select "/><Run Text="the backup dump file, and the application will then handle the rest automatically."/></TextBlock>
+            <TextBlock TextWrapping="Wrap" Margin="0,0,0,10"><Run Text="Restoring a database backup is a three-step process: 
+&#10;1) Select the target database. This database must exist on the My Databases page.
+&#10;2) Select a file to restore.
+&#10;3) Click on 'Restore the database'."/></TextBlock>
 
-            <TextBlock TextWrapping="Wrap" Margin="0,0,0,20"><Bold><Run Text="NOTICE:"/></Bold><Run Text=" Restoring a database will delete the database from MySQL, and replace it with the data created in the selected backup dump file."/></TextBlock>
+            <TextBlock TextWrapping="Wrap" Margin="0,0,0,20"><Bold><Run Text="IMPORTANT:"/></Bold><Run Text=" This process cannot be undone! Restoring a database will delete the database from MySQL, and replace it with the data stored in the selected backup dump file."/></TextBlock>
 
             <Grid>
                 <Grid.RowDefinitions>
@@ -37,7 +40,7 @@
 
                 <Label Grid.Row="1" Grid.Column="0" Target="{Binding TextRestoreFile}" Content="File to restore:"/>
                 <TextBox Grid.Row="1" Grid.Column="1" Margin="10,10" Name="TextRestoreFile"/>
-                <Button Grid.Row="1" Grid.Column="2" Margin="10,10" x:Name="SelectBackupDumpFileButton" Content="Select Dump File" Click="SelectBackupDumpFileButton_Click"></Button>
+                <Button Grid.Row="1" Grid.Column="2" Margin="10,10" x:Name="SelectBackupDumpFileButton" Content="Select Backup File" Click="SelectBackupDumpFileButton_Click"></Button>
 
                 <Button Grid.Row="2" Grid.Column="1" Margin="10,10" x:Name="RestoreDatabaseButton" Content="Restore the database" Click="RestoreDatabaseButton_Click"></Button>
             </Grid>
