@@ -1,27 +1,34 @@
-﻿using MySQLBackup.Application.Model;
+﻿using MySQLBackup.Application.Config;
 using MySQLBackup.Application.Logging;
+using MySQLBackup.Application.Model;
 using MySQLBackup.Application.Util;
+using System;
 using System.Diagnostics;
 using System.Text;
 
 namespace MySQLBackup.Application.Backup
 {
+    /// <summary>
+    /// Takes care of the database restore process.
+    /// </summary>
     class RestoreDatabaseProcess
     {
-        private string dumpFilePath = "";
-        private DatabaseInfo dbInfo = null;
-
-        public RestoreDatabaseProcess(string dumpFilePath, DatabaseInfo dbInfo)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RestoreDatabaseProcess"/> class.
+        /// </summary>
+        public RestoreDatabaseProcess()
         {
-            this.dumpFilePath = dumpFilePath;
-            this.dbInfo = dbInfo;
         }
 
-        /**
-         * Restore a database, from a specific backup dump file.
-         */
-        public void RestoreDatabase(Process process)
+        /// <summary>
+        /// Restores the database.
+        /// </summary>
+        /// <param name="dumpFilePath">The dump file path.</param>
+        /// <param name="dbInfo">The database information.</param>
+        public void RestoreDatabase(string dumpFilePath, Guid databaseId)
         {
+            Process process = null;
+            DatabaseInfo dbInfo = new DatabasesXmlHandler().GetDatabaseNode(databaseId);
             ProcessStartInfo psi = new ProcessStartInfo();
             psi.FileName = "mysql";
             psi.RedirectStandardInput = true;

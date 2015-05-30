@@ -1,4 +1,4 @@
-# MySQL Backup Manager 1.4.1 #
+# MySQL Backup Manager 1.4.2 #
 
 > MySQL Backup Manager automates the process of taking daily MySQL database backups. The software consists of a Windows service, which handles the creation and cleaning up of backups, and a UI to modify which databases are backed up, and when these backups are scheduled.
 
@@ -21,6 +21,7 @@ Installer packages are available for download on the [Releases](https://github.c
 
 - If you're updating from version 1.3.0 or earlier, please uninstall the MySQL Backup Manager before running the install. Your settings and existing backups will remain intact.
 - After version 1.4.0, the installer will automatically take care of the update. Your settings and existing backups will remain intact. 
+- Version 1.4.2 has a new configuration file structure for database backup settings. The old configuration file will be automatically updated; a backup copy is kept just in case.
 
 ### System Requirements ###
 

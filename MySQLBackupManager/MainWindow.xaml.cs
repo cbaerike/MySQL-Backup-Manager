@@ -1,20 +1,6 @@
 ﻿using FirstFloor.ModernUI.Presentation;
 using FirstFloor.ModernUI.Windows.Controls;
 using MySQLBackup.Application.Config;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace MySQLBackupManager
 {
@@ -23,17 +9,21 @@ namespace MySQLBackupManager
     /// </summary>
     public partial class MainWindow : ModernWindow
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MainWindow"/> class.
+        /// </summary>
         public MainWindow()
         {
             InitializeComponent();
-            new ConfigLocationCreator().CreateConfigLocations();
+            BackupManagerMainWindow.Title += " " + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString(3);
+            new ConfigurationHandler().InitializeConfigFiles();
             //Load the user settings
             this.LoadUserSettings();
         }
 
-        /**
-         * Load User settings saved in the settings.settings file
-         */
+        /// <summary>
+        /// Loads the user settings saved in the settings.settings file.
+        /// </summary>
         private void LoadUserSettings()
         {
             AppearanceManager.Current.ThemeSource = Properties.Settings.Default.ApplicationTheme.Equals("LightThemeSource") ? AppearanceManager.LightThemeSource : AppearanceManager.DarkThemeSource;

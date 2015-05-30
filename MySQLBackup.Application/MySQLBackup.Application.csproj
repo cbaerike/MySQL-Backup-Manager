@@ -49,9 +49,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Backup\BackupHandler.cs" />
-    <Compile Include="Config\ConfigLocationCreator.cs" />
+    <Compile Include="Config\ConfigurationXmlHandler.cs" />
     <Compile Include="Config\ConfigurationHandler.cs" />
-    <Compile Include="Config\DatabasesHandler.cs" />
+    <Compile Include="Config\DatabasesXmlHandler.cs" />
     <Compile Include="Util\EncryptionHelper.cs" />
     <Compile Include="Util\ErrorHandler.cs" />
     <Compile Include="Logging\LogHandler.cs" />

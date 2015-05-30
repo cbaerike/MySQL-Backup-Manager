@@ -13,7 +13,7 @@ namespace MySQLBackup.Application.Scheduler
         /// </summary>
         public enum Properties
         {
-            DatabaseName
+            DatabaseId
         };
 
         /// <summary>
@@ -22,15 +22,18 @@ namespace MySQLBackup.Application.Scheduler
         /// <param name="context">The execution context.</param>
         public void Execute(IJobExecutionContext context)
         {
-            String databaseName = context.JobDetail.JobDataMap.GetString(CreateBackupJob.Properties.DatabaseName.ToString());
-            BackupHandler backupHandler = new BackupHandler();
-            try
+            Guid databaseId;
+            if (Guid.TryParse(context.JobDetail.JobDataMap.GetString(CreateBackupJob.Properties.DatabaseId.ToString()), out databaseId))
             {
-                backupHandler.CreateBackup(databaseName);
-            }
-            catch (Exception ex)
-            {
-                new LogHandler().LogMessage(LogHandler.MessageType.ERROR, "Job: " + context.JobDetail.Key + Environment.NewLine + ex.ToString());
+                BackupHandler backupHandler = new BackupHandler();
+                try
+                {
+                    backupHandler.CreateBackup(databaseId);
+                }
+                catch (Exception ex)
+                {
+                    new LogHandler().LogMessage(LogHandler.MessageType.ERROR, "Job: " + context.JobDetail.Key + Environment.NewLine + ex.ToString());
+                }
             }
         }
     }

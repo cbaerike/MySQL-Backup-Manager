@@ -25,8 +25,8 @@ namespace MySQLBackup.Application.Scheduler
         private void DeleteOldBackupFiles()
         {
             logHandler = new LogHandler();
-            int days = ConfigurationHandler.GetDeleteBackupsOlderThanDays();
-            string backupLocation = ConfigurationHandler.GetBackupLocation();
+            int days = ConfigurationXmlHandler.GetDeleteBackupsOlderThanDays();
+            string backupLocation = ConfigurationXmlHandler.GetBackupLocation();
 
             if (days > 0)
             {

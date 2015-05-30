@@ -23,41 +23,48 @@ namespace MySQLBackup.Application.Scheduler
         public void ScheduleJobs()
         {
             LogHandler logHandler = new LogHandler();
-            List<DatabaseInfo> dbNodes = new DatabasesHandler().GetAllDatabaseNodes();
+            List<DatabaseInfo> dbNodes = new DatabasesXmlHandler().GetAllDatabaseNodes();
             if (0 == dbNodes.Count)
             {
                 logHandler.LogMessage(LogHandler.MessageType.WARNING, "MySQL Backup Scheduler - No database nodes found. No backups will be scheduled.");
             }
             else
             {
-                scheduler = StdSchedulerFactory.GetDefaultScheduler();
-                scheduler.Start();
-                foreach (DatabaseInfo dbNode in dbNodes)
+                try
                 {
-                    //Schedule backup job
-                    IJobDetail backupJobDetail = JobBuilder.Create<CreateBackupJob>()
-                        .WithIdentity(dbNode.DatabaseName + "_Job", "Backup")
-                        .UsingJobData(CreateBackupJob.Properties.DatabaseName.ToString(), dbNode.DatabaseName)
-                        .Build();
-                    ITrigger backupJobTrigger = TriggerBuilder.Create()
-                        .WithIdentity(dbNode.DatabaseName + "_Trigger", "Backup")
-                        .StartAt(DateBuilder.TodayAt(dbNode.StartTime.Hours, dbNode.StartTime.Minutes, 0))
-                        .WithSimpleSchedule(x => x.WithIntervalInHours(24).RepeatForever())
-                        .Build();
-                    scheduler.ScheduleJob(backupJobDetail, backupJobTrigger);
-                    logHandler.LogMessage(LogHandler.MessageType.INFO, "Backup job scheduled for database: " + dbNode.DatabaseName);
+                    scheduler = StdSchedulerFactory.GetDefaultScheduler();
+                    scheduler.Start();
+                    foreach (DatabaseInfo dbNode in dbNodes)
+                    {
+                        //Schedule backup job
+                        IJobDetail backupJobDetail = JobBuilder.Create<CreateBackupJob>()
+                            .WithIdentity(dbNode.ID.ToString() + "_Job", "Backup")
+                            .UsingJobData(CreateBackupJob.Properties.DatabaseId.ToString(), dbNode.ID.ToString())
+                            .Build();
+                        ITrigger backupJobTrigger = TriggerBuilder.Create()
+                            .WithIdentity(dbNode.ID.ToString() + "_Trigger", "Backup")
+                            .StartAt(DateBuilder.TodayAt(dbNode.StartTime.Hours, dbNode.StartTime.Minutes, 0))
+                            .WithSimpleSchedule(x => x.WithIntervalInHours(24).RepeatForever())
+                            .Build();
+                        scheduler.ScheduleJob(backupJobDetail, backupJobTrigger);
+                        logHandler.LogMessage(LogHandler.MessageType.INFO, "Backup job scheduled for database: " + dbNode.DatabaseName + " @ " + dbNode.Host);
+                    }
+                    //Schedule cleanup job
+                    IJobDetail cleanupJobDetail = JobBuilder.Create<DeleteOldBackupsJob>()
+                            .WithIdentity("Delete_Old_Job", "Cleanup")
+                            .Build();
+                    ITrigger cleanupTrigger = TriggerBuilder.Create()
+                            .WithIdentity("Delete_Old_Trigger", "Cleanup")
+                            .StartAt(DateBuilder.TodayAt(1, 0, 0))
+                            .WithSimpleSchedule(x => x.WithIntervalInHours(24).RepeatForever())
+                            .Build();
+                    scheduler.ScheduleJob(cleanupJobDetail, cleanupTrigger);
+                    logHandler.LogMessage(LogHandler.MessageType.INFO, "Cleanup job scheduled.");
                 }
-                //Schedule cleanup job
-                IJobDetail cleanupJobDetail = JobBuilder.Create<DeleteOldBackupsJob>()
-                        .WithIdentity("Delete_Old_Job", "Cleanup")
-                        .Build();
-                ITrigger cleanupTrigger = TriggerBuilder.Create()
-                        .WithIdentity("Delete_Old_Trigger", "Cleanup")
-                        .StartAt(DateBuilder.TodayAt(1, 0, 0))
-                        .WithSimpleSchedule(x => x.WithIntervalInHours(24).RepeatForever())
-                        .Build();
-                scheduler.ScheduleJob(cleanupJobDetail, cleanupTrigger);
-                logHandler.LogMessage(LogHandler.MessageType.INFO, "Cleanup job scheduled.");
+                catch (Exception ex)
+                {
+                    logHandler.LogMessage(LogHandler.MessageType.ERROR, "Error scheduling backup jobs: " + ex.ToString());
+                }
             }
         }
 

@@ -1,4 +1,5 @@
 ﻿using MySQLBackup.Application.Model;
+using System;
 
 namespace MySQLBackup.Application.Backup
 {
@@ -7,23 +8,23 @@ namespace MySQLBackup.Application.Backup
         /// <summary>
         /// Creates a backup of the given database.
         /// </summary>
-        /// <param name="databaseName">Name of the database.</param>
-        public bool CreateBackup(string databaseName)
+        /// <param name="databaseId">The database identifier.</param>
+        /// <returns></returns>
+        public bool CreateBackup(Guid databaseId)
         {
             MySQLDumpProcess dumpProcess = new MySQLDumpProcess();
-            return dumpProcess.ProcessMySqlDump(databaseName);
+            return dumpProcess.ProcessMySqlDump(databaseId);
         }
 
         /// <summary>
         /// Restore a specific database, from a backup dump file.
         /// </summary>
-        /// <param name="process">The process.</param>
         /// <param name="dumpFilePath">The dump file path.</param>
-        /// <param name="dbInfo">The database information.</param>
-        public void RestoreDatabase(System.Diagnostics.Process process, string dumpFilePath, DatabaseInfo dbInfo)
+        /// <param name="databaseId">The database identifier.</param>
+        public void RestoreDatabase(string dumpFilePath, Guid databaseId)
         {
-            RestoreDatabaseProcess restoreProcess = new RestoreDatabaseProcess(dumpFilePath, dbInfo);
-            restoreProcess.RestoreDatabase(process);
+            RestoreDatabaseProcess restoreProcess = new RestoreDatabaseProcess();
+            restoreProcess.RestoreDatabase(dumpFilePath, databaseId);
         }
     }
 }

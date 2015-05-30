@@ -27,8 +27,8 @@ namespace MySQLBackupManager.Pages.Content
          */
         private void SyncFromConfiguration()
         {
-            this.backupLocation = ConfigurationHandler.GetBackupLocation();
-            this.deleteBackupAfterDays = ConfigurationHandler.GetDeleteBackupsOlderThanDays();
+            this.backupLocation = ConfigurationXmlHandler.GetBackupLocation();
+            this.deleteBackupAfterDays = ConfigurationXmlHandler.GetDeleteBackupsOlderThanDays();
         }
 
         //Properties
@@ -41,7 +41,7 @@ namespace MySQLBackupManager.Pages.Content
                 OnPropertyChanged("BackupLocation");
 
                 //Save the modification in the Configurations File.
-                ConfigurationHandler.SetBackupLocation(this.backupLocation);
+                ConfigurationXmlHandler.SetBackupLocation(this.backupLocation);
             }
         }
 
@@ -54,7 +54,7 @@ namespace MySQLBackupManager.Pages.Content
                 OnPropertyChanged("DeleteBackupAfterDays");
 
                 //Save the modification in the Configurations File.
-                ConfigurationHandler.SetDeleteBackupsOlderThanDays(this.deleteBackupAfterDays);
+                ConfigurationXmlHandler.SetDeleteBackupsOlderThanDays(this.deleteBackupAfterDays);
             }
         }
 

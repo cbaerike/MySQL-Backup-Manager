@@ -1,21 +1,11 @@
 ﻿using MySQLBackup.Application.Backup;
 using MySQLBackup.Application.Config;
 using MySQLBackup.Application.Model;
+using MySQLBackupManager.Pages.Content;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace MySQLBackupManager.Pages
 {
@@ -24,80 +14,69 @@ namespace MySQLBackupManager.Pages
     /// </summary>
     public partial class RestoreDatabasePage : Page
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RestoreDatabasePage"/> class.
+        /// </summary>
         public RestoreDatabasePage()
         {
             InitializeComponent();
+            this.DataContext = new DatabasesViewModel();
         }
 
+        /// <summary>
+        /// Handles the Click event of the SelectBackupDumpFileButton control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
         private void SelectBackupDumpFileButton_Click(object sender, RoutedEventArgs e)
         {
             Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
-
-            dlg.InitialDirectory = ConfigurationHandler.GetBackupLocation();
-
-            //Set Extension filter and default extension
+            dlg.InitialDirectory = ConfigurationXmlHandler.GetBackupLocation();
             dlg.DefaultExt = ".dump";
             dlg.Filter = "Backup Dump Files (*.dump)|*.dump|SQL Dump Files (*.sql)|*.sql";
-
-            Nullable<bool> hasSelected = dlg.ShowDialog();
-
+            Boolean? hasSelected = dlg.ShowDialog();
             if (hasSelected == true)
             {
-                string fileName = dlg.FileName;
-
-                Process process = null;
-
-                try
-                {
-                    DatabaseInfo dbInfo = RetrieveDatabaseInformation(dlg.FileName);
-                    if (dbInfo == null)
-                    {
-                        FirstFloor.ModernUI.Windows.Controls.ModernDialog.ShowMessage("We need some information, to restore your database. Please go to 'Add Database', and add the database, with the correct information, and then try to restore the database again. Notice, the database doesn't need to be created in MySQL.", "Failure", MessageBoxButton.OK);
-                    }
-                    else
-                    {
-                        if (FirstFloor.ModernUI.Windows.Controls.ModernDialog.ShowMessage(string.Format("You are about to restore the database {0} with a backup file. This means that all content in the database will be overwritten, with the information from the backup file. This action can't be undone. Do you want to continue?", dbInfo.DatabaseName), "Proceed with database restore?", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
-                        {
-                            BackupHandler backupHandler = new BackupHandler();
-                            backupHandler.RestoreDatabase(process, fileName, dbInfo);
-                            FirstFloor.ModernUI.Windows.Controls.ModernDialog.ShowMessage(string.Format("The database {0} has been restored from this backup dump file '{1}'", dbInfo.DatabaseName, fileName), "Success", MessageBoxButton.OK);
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.Message);
-                }
-                finally
-                {
-                    if (process != null)
-                    {
-                        process.Close();
-                    }
-                }
-
+                TextRestoreFile.Text = dlg.FileName;
             }
         }
 
-        /**
-         * Get the database information needed for the particular database in the dump file.
-         */
-        private DatabaseInfo RetrieveDatabaseInformation(string dumpFilePath)
+        /// <summary>
+        /// Handles the Click event of the RestoreDatabaseButton control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
+        private void RestoreDatabaseButton_Click(object sender, RoutedEventArgs e)
         {
-            string[] lines = System.IO.File.ReadAllLines(dumpFilePath);
-            const string test = "Database: ";
-            string databaseName = "";
-
-            foreach (string line in lines)
+            String filename = TextRestoreFile.Text;
+            DatabaseInfo dbInfo = SelectDatabase.SelectedItem as DatabaseInfo;
+            if (null == dbInfo)
             {
-                if (line.Contains(test))
+                FirstFloor.ModernUI.Windows.Controls.ModernDialog.ShowMessage(string.Format("Please select a database to restore the file into."), "No database selected", MessageBoxButton.OK);
+            }
+            else
+            {
+                if (!File.Exists(filename))
                 {
-                    int startPos = line.LastIndexOf(test) + test.Length;
-                    databaseName = line.Substring(startPos);
-                    break;
+                    FirstFloor.ModernUI.Windows.Controls.ModernDialog.ShowMessage(string.Format("The file {0} could not be found. Please select a valid dump file.", filename), "File not found", MessageBoxButton.OK);
+                }
+                else
+                {
+                    try
+                    {
+                        if (FirstFloor.ModernUI.Windows.Controls.ModernDialog.ShowMessage(string.Format("You are about to restore the database {0}[{1}] with a backup file. This means that all content in the database will be overwritten, with the information from the backup file. This action can't be undone. Do you want to continue?",dbInfo.Host,dbInfo.DatabaseName), "Proceed with database restore?", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                        {
+                            BackupHandler backupHandler = new BackupHandler();
+                            backupHandler.RestoreDatabase(filename, dbInfo.ID);
+                            FirstFloor.ModernUI.Windows.Controls.ModernDialog.ShowMessage(string.Format("The database {0} has been restored from this backup dump file '{1}'", dbInfo.DatabaseName, filename), "Success", MessageBoxButton.OK);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        FirstFloor.ModernUI.Windows.Controls.ModernDialog.ShowMessage(ex.Message,"Error", MessageBoxButton.OK);
+                    }
                 }
             }
-            return new DatabasesHandler().GetDatabaseNode(databaseName);
         }
     }
 }

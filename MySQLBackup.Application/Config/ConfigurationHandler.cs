@@ -1,10 +1,12 @@
 ﻿using Microsoft.Win32;
 using System;
 using System.IO;
-using System.Xml;
 
 namespace MySQLBackup.Application.Config
 {
+    /// <summary>
+    /// Provides common configuration file methods.
+    /// </summary>
     public class ConfigurationHandler
     {
         /// <summary>
@@ -16,7 +18,7 @@ namespace MySQLBackup.Application.Config
         /// The configuration file location.
         /// </summary>
         public static readonly string CONFIGURATION_LOCATION = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + @"\MySQLBackup\Configuration\";
-        
+
         /// <summary>
         /// The database config file - this holds the scheduled backups.
         /// </summary>
@@ -38,61 +40,16 @@ namespace MySQLBackup.Application.Config
         public static readonly string DEFAULT_BACKUP_LOCATION = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + @"\MySQLBackup\Backup\";
 
         /// <summary>
-        /// Sets the backup location.
+        /// Initializes the config folders and files.
         /// </summary>
-        /// <param name="location">The new location.</param>
-        public static void SetBackupLocation(string location)
+        public void InitializeConfigFiles()
         {
-            XmlDocument document = new XmlDocument();
-            document.Load(ConfigurationHandler.APP_CONFIG_FILE);
-            XmlNode backupLocationNode = document.SelectSingleNode("Configuration/BackupLocation");
-
-            //If location doesn't ends with backslash, then add it before setting the backup location
-            backupLocationNode.InnerText = (location.Trim().EndsWith(@"\")) ? location : location + @"\";
-
-            document.Save(ConfigurationHandler.APP_CONFIG_FILE);
-
-            //Create the new directory if it doesn't exist
-            if (!Directory.Exists(Path.GetDirectoryName(backupLocationNode.InnerText))) { 
-                Directory.CreateDirectory(Path.GetDirectoryName(backupLocationNode.InnerText)); }
-        }
-
-        /// <summary>
-        /// Sets the "delete backups older than" days. If set to 0, no backups will be deleted.
-        /// </summary>
-        /// <param name="days">The days.</param>
-        public static void SetDeleteBackupsOlderThanDays(int days)
-        {
-            XmlDocument document = new XmlDocument();
-            document.Load(ConfigurationHandler.APP_CONFIG_FILE);
-            XmlNode deleteBackupsOlderThanNode = document.SelectSingleNode("Configuration/DeleteBackupsOlderThan");
-
-            deleteBackupsOlderThanNode.InnerText = Convert.ToString(days);
-            document.Save(ConfigurationHandler.APP_CONFIG_FILE);
-        }
-
-        /// <summary>
-        /// Gets the backup location.
-        /// </summary>
-        /// <returns></returns>
-        public static string GetBackupLocation()
-        {
-            XmlDocument document = new XmlDocument();
-            document.Load(ConfigurationHandler.APP_CONFIG_FILE);
-            XmlNode backupLocationNode = document.SelectSingleNode("Configuration/BackupLocation");
-            return backupLocationNode.InnerText;
-        }
-
-        /// <summary>
-        /// Gets the "delete backups older than" days.
-        /// </summary>
-        /// <returns></returns>
-        public static int GetDeleteBackupsOlderThanDays()
-        {
-            XmlDocument document = new XmlDocument();
-            document.Load(ConfigurationHandler.APP_CONFIG_FILE);
-            XmlNode deleteBackupsOlderThanNode = document.SelectSingleNode("Configuration/DeleteBackupsOlderThan");
-            return Convert.ToInt32(deleteBackupsOlderThanNode.InnerText);
+            if (!Directory.Exists(ConfigurationHandler.CONFIGURATION_LOCATION)) { Directory.CreateDirectory(Path.GetDirectoryName(ConfigurationHandler.CONFIGURATION_LOCATION)); }
+            if (!Directory.Exists(ConfigurationHandler.DEFAULT_BACKUP_LOCATION)) { Directory.CreateDirectory(Path.GetDirectoryName(ConfigurationHandler.DEFAULT_BACKUP_LOCATION)); }
+            if (!File.Exists(ConfigurationHandler.APP_CONFIG_FILE)) { ConfigurationXmlHandler.CreateNewConfigurationFile(); }
+            DatabasesXmlHandler dbHandler = new DatabasesXmlHandler();
+            if (!File.Exists(ConfigurationHandler.DB_CONFIG_FILE)) { dbHandler.CreateNewDatabasesFile(); }
+            dbHandler.UpdateDatabasesFileVersion();
         }
 
         /// <summary>
