@@ -5,6 +5,7 @@
       xmlns:mui="http://firstfloorsoftware.com/ModernUI"
       xmlns:xcdg="http://schemas.xceed.com/wpf/xaml/datagrid"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
       mc:Ignorable="d" 
       d:DesignHeight="300" d:DesignWidth="600"
 	Title="Databases" Loaded="Page_Loaded">
@@ -16,6 +17,10 @@
                 <xcdg:DataGridCollectionViewSource.GroupDescriptions>
                     <PropertyGroupDescription PropertyName="Host" />
                 </xcdg:DataGridCollectionViewSource.GroupDescriptions>
+                <xcdg:DataGridCollectionViewSource.SortDescriptions>
+                    <scm:SortDescription PropertyName="Host" Direction="Ascending"/>
+                    <scm:SortDescription PropertyName="DatabaseName" Direction="Ascending"/>
+                </xcdg:DataGridCollectionViewSource.SortDescriptions>
             </xcdg:DataGridCollectionViewSource>
             <Style TargetType="{x:Type xcdg:DataRow}">
                 <EventSetter Event="MouseDoubleClick" Handler="DatabasesGrid_MouseDoubleClick"/>
