@@ -1,25 +1,53 @@
 ﻿using MySQLBackup.Application.Logging;
 using System;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 namespace MySQLBackup.Application.Model
 {
     /// <summary>
     /// Holds conifguration information about a database backup
     /// </summary>
-    public class DatabaseInfo
+    public class DatabaseInfo : INotifyPropertyChanged
     {
-        private int startTimeHour;
-        private int startTimeMinute;
+        private Guid id;
+        private string host;
+        private string user;
+        private string password;
+        private string databaseName;
+        private TimeSpan startTime;
 
         /// <summary>
         /// Gets or sets the database identifier.
         /// </summary>
-        public Guid ID { get; set; }
+        public Guid ID
+        {
+            get { return this.id; }
+            set
+            {
+                if (value != this.id)
+                {
+                    this.id = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
 
         /// <summary>
         /// Gets or sets the host, including the port number if one is set.
         /// </summary>
-        public string Host { get; set; }
+        public string Host
+        {
+            get { return this.host; }
+            set
+            {
+                if (value != this.host)
+                {
+                    this.host = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
 
         /// <summary>
         /// Gets the host, without the port number.
@@ -77,42 +105,83 @@ namespace MySQLBackup.Application.Model
         /// <summary>
         /// Gets or sets the username.
         /// </summary>
-        public string User { get; set; }
+        public string User
+        {
+            get { return this.user; }
+            set
+            {
+                if (value != this.user)
+                {
+                    this.user = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
 
         /// <summary>
         /// Gets or sets the password.
         /// </summary>
-        public string Password { get; set; }
+        public string Password
+        {
+            get { return this.password; }
+            set
+            {
+                if (value != this.password)
+                {
+                    this.password = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
 
         /// <summary>
         /// Gets or sets the name of the database.
         /// </summary>
-        public string DatabaseName { get; set; }
-
-        /// <summary>
-        /// Gets the start time.
-        /// </summary>
-        public TimeSpan StartTime { get { return new TimeSpan(startTimeHour, startTimeMinute, 0); } }
-
-        /// <summary>
-        /// Sets the start time hour.
-        /// </summary>
-        public int StartTimeHour
+        public string DatabaseName
         {
+            get { return this.databaseName; }
             set
             {
-                startTimeHour = (value < 0 || value > 23) ? 0 : value;
+                if (value != this.databaseName)
+                {
+                    this.databaseName = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
+
+        /// <summary>
+        /// Gets or sets the start time.
+        /// </summary>
+        public TimeSpan StartTime
+        {
+            get { return this.startTime; }
+            set
+            {
+                if (value != this.startTime)
+                {
+                    this.startTime = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         /// <summary>
-        /// Sets the start time minute.
+        /// Gets or sets the start time string.
         /// </summary>
-        public int StartTimeMinute
+        public string StartTimeString
         {
+            get { return this.StartTime.ToString(@"{0:hh\:mm}"); }
             set
             {
-                startTimeMinute = (value < 0 || value > 59) ? 0 : value;
+                TimeSpan tmp;
+                if (TimeSpan.TryParse(value, out tmp))
+                {
+                    this.StartTime = tmp;
+                }
             }
         }
 
@@ -126,5 +195,22 @@ namespace MySQLBackup.Application.Model
         {
             return DatabaseName;
         }
+
+        #region IPropertyChanged implementation
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        /// <summary>
+        /// This method is called by the Set accessor of each property. 
+        /// The CallerMemberName attribute that is applied to the optional propertyName 
+        /// parameter causes the property name of the caller to be substituted as an argument. 
+        /// </summary>
+        private void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }
+        #endregion
     }
 }

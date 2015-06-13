@@ -4,38 +4,40 @@ using MySQLBackup.Application.Config;
 using MySQLBackup.Application.Logging;
 using MySQLBackup.Application.Model;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace MySQLBackupManager.Pages
 {
     /// <summary>
-    /// Interaction logic for ModifyDatabasePage.xaml
+    /// Allows modification of database settings.
     /// </summary>
     public partial class ModifyDatabasePage : Page, IContent
     {
+        /// <summary>
+        /// The database handler for interacting with the DB config file
+        /// </summary>
         private readonly DatabasesXmlHandler dbHandler = new DatabasesXmlHandler();
 
+        /// <summary>
+        /// Gets or sets the current database information.
+        /// </summary>
         private DatabaseInfo CurrentDbInfo { get; set; }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ModifyDatabasePage"/> class.
+        /// </summary>
         public ModifyDatabasePage()
         {
             InitializeComponent();
-            this.DataContext = this;
+            this.DataContext = CurrentDbInfo;
         }
 
+        /// <summary>
+        /// Called when navigation to a content fragment begins: Loads the info for the selected database.
+        /// </summary>
+        /// <param name="e">An object that contains the navigation data.</param>
         public void OnFragmentNavigation(FirstFloor.ModernUI.Windows.Navigation.FragmentNavigationEventArgs e)
         {
             Guid databaseId;
@@ -48,31 +50,54 @@ namespace MySQLBackupManager.Pages
                     NavigationCommands.GoToPage.Execute(new Uri("/Pages/DatabasesPage.xaml", UriKind.Relative), FirstFloor.ModernUI.Windows.Navigation.NavigationHelper.FindFrame(null, this));
                 }
                 CurrentDbInfo = dbInfo;
+                this.DataContext = CurrentDbInfo;
             }
         }
 
+        /// <summary>
+        /// Called when this instance is no longer the active content in a frame.
+        /// </summary>
+        /// <param name="e">An object that contains the navigation data.</param>
         public void OnNavigatedFrom(FirstFloor.ModernUI.Windows.Navigation.NavigationEventArgs e)
         {
         }
 
+        /// <summary>
+        /// Called when a this instance becomes the active content in a frame.
+        /// </summary>
+        /// <param name="e">An object that contains the navigation data.</param>
         public void OnNavigatedTo(FirstFloor.ModernUI.Windows.Navigation.NavigationEventArgs e)
         {
         }
 
+        /// <summary>
+        /// Called just before this instance is no longer the active content in a frame.
+        /// </summary>
+        /// <param name="e">An object that contains the navigation data.</param>
+        /// <remarks>
+        /// The method is also invoked when parent frames are about to navigate.
+        /// </remarks>
         public void OnNavigatingFrom(FirstFloor.ModernUI.Windows.Navigation.NavigatingCancelEventArgs e)
         {
         }
 
+        /// <summary>
+        /// Handles the Click event of the ModifyDatabaseButton control: Saves the new settings and navigates to the overview.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
         private void ModifyDatabaseButton_Click(object sender, RoutedEventArgs e)
         {
-            string[] startTimeSplit = startTime.Text.Split(':');
-            CurrentDbInfo.StartTimeHour = Convert.ToInt32(startTimeSplit[0]);
-            CurrentDbInfo.StartTimeMinute = Convert.ToInt32(startTimeSplit[1]);
             dbHandler.UpdateDatabaseNode(CurrentDbInfo);
             new LogHandler().LogMessage(LogHandler.MessageType.INFO, string.Format("The database {0} has been successfully modified", CurrentDbInfo.DatabaseName));
             NavigationCommands.GoToPage.Execute(new Uri("/Pages/DatabasesPage.xaml", UriKind.Relative), FirstFloor.ModernUI.Windows.Navigation.NavigationHelper.FindFrame(null, this));
         }
 
+        /// <summary>
+        /// Handles the Click event of the RemoveDatabaseButton control: Deleted the database from the config file.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
         private void RemoveDatabaseButton_Click(object sender, RoutedEventArgs e)
         {
             var result = FirstFloor.ModernUI.Windows.Controls.ModernDialog.ShowMessage(string.Format("Are you sure that you want to remove the database '{0}'?\nThis action can't be undone!", CurrentDbInfo.DatabaseName), "Remove Database", MessageBoxButton.YesNo);
@@ -85,6 +110,11 @@ namespace MySQLBackupManager.Pages
             }
         }
 
+        /// <summary>
+        /// Handles the Click event of the MakeManualBackupButton control: Creates a manual backup of the selected database.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
         private void MakeManualBackupButton_Click(object sender, RoutedEventArgs e)
         {
             try

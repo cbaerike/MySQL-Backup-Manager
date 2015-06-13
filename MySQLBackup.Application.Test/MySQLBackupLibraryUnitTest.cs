@@ -67,8 +67,7 @@ namespace MySQLBackup.ApplicationTest
             dbInfo.User = "test";
             dbInfo.Password = "secret";
             dbInfo.DatabaseName = "test_database";
-            dbInfo.StartTimeHour = 4;
-            dbInfo.StartTimeMinute = 30;
+            dbInfo.StartTime = new TimeSpan(4, 30, 0);
 
             dbHandler.InsertDatabaseNode(dbInfo);
 
@@ -94,8 +93,7 @@ namespace MySQLBackup.ApplicationTest
             dbInfo.User = "test";
             dbInfo.Password = "secret";
             dbInfo.DatabaseName = "TestDatabase";
-            dbInfo.StartTimeHour = 4;
-            dbInfo.StartTimeMinute = 30;
+            dbInfo.StartTime = new TimeSpan(4, 30, 0);
 
             dbHandler.InsertDatabaseNode(dbInfo);
             dbHandler.RemoveDatabaseNode(dbInfo.ID);
@@ -118,8 +116,7 @@ namespace MySQLBackup.ApplicationTest
             dbInfo.User = "test";
             dbInfo.Password = "secret";
             dbInfo.DatabaseName = "TestDatabase";
-            dbInfo.StartTimeHour = 4;
-            dbInfo.StartTimeMinute = 30;
+            dbInfo.StartTime = new TimeSpan(4, 30, 0);
 
             dbHandler.InsertDatabaseNode(dbInfo);
 
@@ -140,14 +137,12 @@ namespace MySQLBackup.ApplicationTest
             dbInfo.User = "test";
             dbInfo.Password = "secret";
             dbInfo.DatabaseName = "TestDatabase";
-            dbInfo.StartTimeHour = 4;
-            dbInfo.StartTimeMinute = 30;
+            dbInfo.StartTime = new TimeSpan(4, 30, 0);
 
             dbHandler.InsertDatabaseNode(dbInfo);
 
             //modify the dbInfo start time
-            dbInfo.StartTimeHour = 22;
-            dbInfo.StartTimeMinute = 59;
+            dbInfo.StartTime = new TimeSpan(22, 59, 0);
 
             dbHandler.UpdateDatabaseNode(dbInfo);
 
@@ -261,8 +256,7 @@ namespace MySQLBackup.ApplicationTest
             dbInfo.User = "test";
             dbInfo.Password = "secret";
             dbInfo.DatabaseName = "TestDatabase";
-            dbInfo.StartTimeHour = 4;
-            dbInfo.StartTimeMinute = 30;
+            dbInfo.StartTime = new TimeSpan(4, 30, 0);
 
 
             dbHandler.InsertDatabaseNode(dbInfo);

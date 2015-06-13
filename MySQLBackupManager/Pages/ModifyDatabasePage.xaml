@@ -32,23 +32,23 @@
 
                 <!-- Host -->
                 <Label Target="{Binding ElementName=hostTextBox}" Content="Host:" Grid.Row="0" Grid.Column="0" Margin="0,0,16,8" VerticalAlignment="Center"></Label>
-                <TextBox Name="hostTextBox" Grid.Column="1" Grid.Row="0" Margin="0,0,0,8" Text="{Binding CurrentDbInfo.Host, Mode=TwoWay}"></TextBox>
+                <TextBox Name="hostTextBox" Grid.Column="1" Grid.Row="0" Margin="0,0,0,8" Text="{Binding Path=Host, Mode=TwoWay}"></TextBox>
 
                 <!-- Database Name -->
                 <Label Target="{Binding ElementName=databaseTextBox}" Content="Database:" Grid.Row="1" Grid.Column="0" Margin="0,0,16,8" VerticalAlignment="Center"></Label>
-                <TextBox Name="databaseTextBox" Grid.Column="1" Grid.Row="1" Margin="0,0,0,8" Text="{Binding CurrentDbInfo.DatabaseName, Mode=TwoWay}"></TextBox>
+                <TextBox Name="databaseTextBox" Grid.Column="1" Grid.Row="1" Margin="0,0,0,8" Text="{Binding Path=DatabaseName, Mode=TwoWay}"></TextBox>
 
                 <!-- User -->
                 <Label Target="{Binding ElementName=userTextBox}" Content="User:" Grid.Row="2" Grid.Column="0" Margin="0,0,16,8" VerticalAlignment="Center"></Label>
-                <TextBox Name="userTextBox" Grid.Column="1" Grid.Row="2" Margin="0,0,0,8" Text="{Binding CurrentDbInfo.User, Mode=TwoWay}"></TextBox>
+                <TextBox Name="userTextBox" Grid.Column="1" Grid.Row="2" Margin="0,0,0,8" Text="{Binding Path=User, Mode=TwoWay}"></TextBox>
 
                 <!-- Password -->
                 <Label Target="{Binding ElementName=passwordTextBox}" Content="Password:" Grid.Row="3" Grid.Column="0" Margin="0,0,16,8" VerticalAlignment="Center"></Label>
-                <PasswordBox Name="passwordTextBox" Grid.Column="1" Grid.Row="3" Margin="0,0,0,8" pa:PasswordBoxAssistant.BindPassword="true" pa:PasswordBoxAssistant.BoundPassword="{Binding CurrentDbInfo.Password, Mode=TwoWay}"></PasswordBox>
+                <PasswordBox Name="passwordTextBox" Grid.Column="1" Grid.Row="3" Margin="0,0,0,8" pa:PasswordBoxAssistant.BindPassword="true" pa:PasswordBoxAssistant.BoundPassword="{Binding Path=Password, Mode=TwoWay}"></PasswordBox>
 
                 <!-- Start Time -->
                 <Label Target="{Binding ElementName=passwordTextBox}" Content="Start Time:" Grid.Row="4" Grid.Column="0" Margin="0,0,16,8" VerticalAlignment="Center"></Label>
-                <xctk:DateTimeUpDown Grid.Row="4" Grid.Column="1" Format="Custom" Name="startTime" FormatString="HH:mm" Value="{Binding CurrentStartTime, Mode=TwoWay}" Margin="0,0,0,8" Width="70" HorizontalAlignment="Left"></xctk:DateTimeUpDown>
+                <xctk:TimeSpanUpDown Grid.Row="4" Grid.Column="1" Name="startTime" Value="{Binding Path=StartTime, Mode=TwoWay}" Margin="0,0,0,8" Width="70" HorizontalAlignment="Left"></xctk:TimeSpanUpDown>
 
                 <Button x:Name="ModifyDatabaseButton" Content="Modify Database" Grid.Row="5" Grid.Column="1" Margin="0,10" Click="ModifyDatabaseButton_Click"></Button>
 

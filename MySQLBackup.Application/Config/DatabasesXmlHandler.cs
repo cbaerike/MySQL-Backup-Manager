@@ -54,10 +54,7 @@ namespace MySQLBackup.Application.Config
                             dbInfo.User = databaseNode.Element("User").Value;
                             dbInfo.Password = EncryptionHelper.Decrypt(databaseNode.Element("Password").Value);
                             XElement backupSettingsNode = databaseNode.Element("BackupSettings");
-                            string startTime = backupSettingsNode.Element("StartTime").Value;
-                            string[] timeSplit = startTime.Split(':');
-                            dbInfo.StartTimeHour = Convert.ToInt32(timeSplit[0]);
-                            dbInfo.StartTimeMinute = Convert.ToInt32(timeSplit[1]);
+                            dbInfo.StartTimeString = backupSettingsNode.Element("StartTime").Value;
                             databaseList.Add(dbInfo);
                         }
                         //Then delete the old file and create a new one.
@@ -180,10 +177,7 @@ namespace MySQLBackup.Application.Config
                 dbInfo.User = databaseNode.Element("User").Value;
                 dbInfo.Password = EncryptionHelper.Decrypt(databaseNode.Element("Password").Value);
                 XElement backupSettingsNode = databaseNode.Element("BackupSettings");
-                string startTime = backupSettingsNode.Element("StartTime").Value;
-                string[] timeSplit = startTime.Split(':');
-                dbInfo.StartTimeHour = Convert.ToInt32(timeSplit[0]);
-                dbInfo.StartTimeMinute = Convert.ToInt32(timeSplit[1]);
+                dbInfo.StartTimeString = backupSettingsNode.Element("StartTime").Value;
             }
             return dbInfo;
         }

@@ -48,11 +48,7 @@ namespace MySQLBackupManager.Pages
             dbInfo.DatabaseName = databaseTextBox.Text;
             dbInfo.User = userTextBox.Text;
             dbInfo.Password = passwordTextBox.Password;
-
-            string[] startTimeSplit = startTime.Text.Split(':');
-            dbInfo.StartTimeHour = Convert.ToInt32(startTimeSplit[0]);
-            dbInfo.StartTimeMinute = Convert.ToInt32(startTimeSplit[1]);
-
+            dbInfo.StartTimeString = startTime.Text;
             databasesViewModel.addDatabase(dbInfo);
 
             ResetTextBoxfields();
