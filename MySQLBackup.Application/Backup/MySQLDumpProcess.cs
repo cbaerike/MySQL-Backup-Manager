@@ -86,18 +86,29 @@ namespace MySQLBackup.Application.Backup
         /// <param name="output">The output.</param>
         private void WriteBackupFile(string hostName, string databaseName, string output)
         {
+            bool error = false;
             string backupLocation = ConfigurationXmlHandler.GetBackupLocation() + hostName + @"\" + databaseName + @"\";
             if (!Directory.Exists(backupLocation))
             {
-                Directory.CreateDirectory(Path.GetDirectoryName(backupLocation));
+                try
+                {
+                    Directory.CreateDirectory(Path.GetDirectoryName(backupLocation));
+                }
+                catch (Exception ex)
+                {
+                    error = true;
+                    new LogHandler().LogMessage(LogHandler.MessageType.ERROR, "Cannot create directory " + backupLocation + Environment.NewLine + ex.ToString());
+                }
             }
-
-            DateTime dateTime = DateTime.Now;
-            String filename = backupLocation + string.Format("{0}_{1}-{2}-{3}_{4}.dump", databaseName, dateTime.Day, dateTime.Month, dateTime.Year, dateTime.ToString("HHmm"));
-            using (StreamWriter writer = new StreamWriter(filename, false, Encoding.UTF8))
+            if (!error)
             {
-                writer.WriteLine(output);
-                writer.Close();
+                DateTime dateTime = DateTime.Now;
+                String filename = backupLocation + string.Format("{0}_{1}-{2}-{3}_{4}.dump", databaseName, dateTime.Day, dateTime.Month, dateTime.Year, dateTime.ToString("HHmm"));
+                using (StreamWriter writer = new StreamWriter(filename, false, Encoding.UTF8))
+                {
+                    writer.WriteLine(output);
+                    writer.Close();
+                }
             }
         }
     }
