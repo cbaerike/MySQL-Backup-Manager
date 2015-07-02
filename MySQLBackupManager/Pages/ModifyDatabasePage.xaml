@@ -7,7 +7,7 @@
       xmlns:mui="http://firstfloorsoftware.com/ModernUI"
       xmlns:pa="clr-namespace:MySQLBackupManager.Pages"
       mc:Ignorable="d" 
-      d:DesignHeight="360" d:DesignWidth="300"
+      d:DesignHeight="400" d:DesignWidth="600"
 	Title="ModifyDatabasePage" mui:ModernFrame.KeepAlive="false">
 
     <Grid HorizontalAlignment="Left" Style="{StaticResource ContentRoot}">
@@ -24,15 +24,18 @@
                     <RowDefinition />
                     <RowDefinition />
                     <RowDefinition />
+                    <RowDefinition />
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="auto"></ColumnDefinition>
                     <ColumnDefinition MinWidth="160"></ColumnDefinition>
+                    <ColumnDefinition MinWidth="320"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
 
                 <!-- Host -->
                 <Label Target="{Binding ElementName=hostTextBox}" Content="Host:" Grid.Row="0" Grid.Column="0" Margin="0,0,16,8" VerticalAlignment="Center"></Label>
                 <TextBox Name="hostTextBox" Grid.Column="1" Grid.Row="0" Margin="0,0,0,8" Text="{Binding Path=Host, Mode=TwoWay}"></TextBox>
+                <TextBlock Grid.Column="2" Grid.Row="0">Use Host:Port for non-standard ports.</TextBlock>
 
                 <!-- Database Name -->
                 <Label Target="{Binding ElementName=databaseTextBox}" Content="Database:" Grid.Row="1" Grid.Column="0" Margin="0,0,16,8" VerticalAlignment="Center"></Label>
@@ -50,11 +53,16 @@
                 <Label Target="{Binding ElementName=passwordTextBox}" Content="Start Time:" Grid.Row="4" Grid.Column="0" Margin="0,0,16,8" VerticalAlignment="Center"></Label>
                 <xctk:TimeSpanUpDown Grid.Row="4" Grid.Column="1" Name="startTime" Value="{Binding Path=StartTime, Mode=TwoWay}" Margin="0,0,0,8" Width="70" HorizontalAlignment="Left"></xctk:TimeSpanUpDown>
 
-                <Button x:Name="ModifyDatabaseButton" Content="Modify Database" Grid.Row="5" Grid.Column="1" Margin="0,10" Click="ModifyDatabaseButton_Click"></Button>
+                <!-- UseDatabase -->
+                <Label Target="{Binding ElementName=useDatabaseCheck}" Content="UseDatabase:" Grid.Row="5" Grid.Column="0" Margin="0,0,16,8" VerticalAlignment="Center"></Label>
+                <CheckBox Name="useDatabaseCheck" Grid.Column="1" Grid.Row="5" Margin="0,0,0,8" IsChecked="{Binding Path=AddUseDatabase, Mode=TwoWay}"></CheckBox>
+                <TextBlock Grid.Column="2" Grid.Row="5" TextWrapping="Wrap">Adds a "Use Database" statement in the backup. This defaults to True for entries created before version 1.4.4.</TextBlock>
 
-                <Button x:Name="MakeManualBackupButton" Content="Backup Database Now" Grid.Row="6" Grid.Column="1" Margin="0,10" Click="MakeManualBackupButton_Click"></Button>
+                <Button x:Name="ModifyDatabaseButton" Content="Modify Database" Grid.Row="6" Grid.Column="1" Margin="0,10" Click="ModifyDatabaseButton_Click"></Button>
+
+                <Button x:Name="MakeManualBackupButton" Content="Backup Database Now" Grid.Row="7" Grid.Column="1" Margin="0,10" Click="MakeManualBackupButton_Click"></Button>
                 
-                <Button x:Name="RemoveDatabaseButton" Content="Remove Database" Grid.Row="7" Grid.Column="1" Margin="0,10,0,10" Click="RemoveDatabaseButton_Click"></Button>
+                <Button x:Name="RemoveDatabaseButton" Content="Remove Database" Grid.Row="8" Grid.Column="1" Margin="0,10,0,10" Click="RemoveDatabaseButton_Click"></Button>
 
             </Grid>
         </StackPanel>

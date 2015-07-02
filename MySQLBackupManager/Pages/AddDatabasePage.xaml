@@ -5,7 +5,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" 
       mc:Ignorable="d" 
-      d:DesignHeight="300" d:DesignWidth="500"
+      d:DesignHeight="300" d:DesignWidth="600"
 	Title="Add Database">
 
     <Grid HorizontalAlignment="Left" Style="{StaticResource ContentRoot}">
@@ -20,11 +20,12 @@
                     <RowDefinition />
                     <RowDefinition />
                     <RowDefinition />
+                    <RowDefinition />
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="auto"></ColumnDefinition>
                     <ColumnDefinition MinWidth="160"></ColumnDefinition>
-                    <ColumnDefinition MinWidth="220"></ColumnDefinition>
+                    <ColumnDefinition MinWidth="320"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
 
                 <!-- Host -->
@@ -47,8 +48,13 @@
                 <!-- Start Time -->
                 <Label Target="{Binding ElementName=passwordTextBox}" Content="Start Time:" Grid.Row="4" Grid.Column="0" Margin="0,0,16,8" VerticalAlignment="Center"></Label>
                 <xctk:DateTimeUpDown Grid.Row="4" Grid.Column="1" Format="Custom" Name="startTime" FormatString="HH:mm" Value="00:00" Margin="0,0,0,8" Width="70" HorizontalAlignment="Left"></xctk:DateTimeUpDown>
-                
-                <Button Content="Add Database" Grid.Row="5" Grid.Column="1" Margin="0,10" Click="BtnAddDatabase_Click"></Button>
+
+                <!-- UseDatabase -->
+                <Label Target="{Binding ElementName=useDatabaseCheck}" Content="UseDatabase:" Grid.Row="5" Grid.Column="0" Margin="0,0,16,8" VerticalAlignment="Center"></Label>
+                <CheckBox Name="useDatabaseCheck" Grid.Column="1" Grid.Row="5" Margin="0,0,0,8"></CheckBox>
+                <TextBlock Grid.Column="2" Grid.Row="5" TextWrapping="Wrap">Adds a "Use Database" statement in the backup. This defaults to True for entries created before version 1.4.4.</TextBlock>
+
+                <Button Content="Add Database" Grid.Row="6" Grid.Column="1" Margin="0,10" Click="BtnAddDatabase_Click"></Button>
                 
             </Grid>
         </StackPanel>

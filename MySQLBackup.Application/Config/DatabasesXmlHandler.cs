@@ -16,7 +16,7 @@ namespace MySQLBackup.Application.Config
         /// <summary>
         /// The current version of the database config file.
         /// </summary>
-        private const string currentFileVersion = "1.1";
+        private const string currentFileVersion = "1.2";
 
         #region File creation and update
         /// <summary>
@@ -55,6 +55,7 @@ namespace MySQLBackup.Application.Config
                             dbInfo.Password = EncryptionHelper.Decrypt(databaseNode.Element("Password").Value);
                             XElement backupSettingsNode = databaseNode.Element("BackupSettings");
                             dbInfo.StartTimeString = backupSettingsNode.Element("StartTime").Value;
+                            dbInfo.AddUseDatabase = true;
                             databaseList.Add(dbInfo);
                         }
                         //Then delete the old file and create a new one.
@@ -66,6 +67,37 @@ namespace MySQLBackup.Application.Config
                         }
                         break;
                     case "1.1":
+                        //Make a backup copy
+                        File.Copy(ConfigurationHandler.DB_CONFIG_FILE, ConfigurationHandler.DB_CONFIG_FILE.Replace(".xml", ".1.1.xml"), true);
+                        //Read the old file contents into memory
+                        databaseList = new List<DatabaseInfo>();
+                        databaseNodeList = document.Elements("Database");
+                        foreach (var databaseNode in databaseNodeList)
+                        {
+                            Guid databaseId;
+                            if (databaseNode != null && Guid.TryParse(databaseNode.Attribute("ID").Value, out databaseId))
+                            {
+                                DatabaseInfo dbInfo = new DatabaseInfo();
+                                dbInfo.ID = databaseId;
+                                dbInfo.DatabaseName = databaseNode.Element("Name").Value;
+                                dbInfo.Host = databaseNode.Element("Host").Value;
+                                dbInfo.User = databaseNode.Element("User").Value;
+                                dbInfo.Password = EncryptionHelper.Decrypt(databaseNode.Element("Password").Value);
+                                XElement backupSettingsNode = databaseNode.Element("BackupSettings");
+                                dbInfo.StartTimeString = backupSettingsNode.Element("StartTime").Value;
+                                dbInfo.AddUseDatabase = true;
+                                databaseList.Add(dbInfo);
+                            }
+                        }
+                        //Then delete the old file and create a new one.
+                        File.Delete(ConfigurationHandler.DB_CONFIG_FILE);
+                        CreateNewDatabasesFile();
+                        foreach (DatabaseInfo dbInfo in databaseList)
+                        {
+                            this.InsertDatabaseNode(dbInfo);
+                        }
+                        break;
+                    case "1.2":
                     default://Nothing to do. This is the latest version.
                         break;
                 }
@@ -82,17 +114,18 @@ namespace MySQLBackup.Application.Config
         /// <summary>
         /// Inserts the database node.
         /// </summary>
-        /// <param name="databaseInfo">The database information.</param>
-        public void InsertDatabaseNode(DatabaseInfo databaseInfo)
+        /// <param name="dbInfo">The database information.</param>
+        public void InsertDatabaseNode(DatabaseInfo dbInfo)
         {
             XElement document = XElement.Load(ConfigurationHandler.DB_CONFIG_FILE);
-            XElement newDatabaseNode = new XElement("Database", new XAttribute("ID", databaseInfo.ID),
-                new XElement("Name", databaseInfo.DatabaseName),
-                new XElement("Host", databaseInfo.Host),
-                new XElement("User", databaseInfo.User),
-                new XElement("Password", EncryptionHelper.Encrypt(databaseInfo.Password)),
+            XElement newDatabaseNode = new XElement("Database", new XAttribute("ID", dbInfo.ID),
+                new XElement("Name", dbInfo.DatabaseName),
+                new XElement("Host", dbInfo.Host),
+                new XElement("User", dbInfo.User),
+                new XElement("Password", EncryptionHelper.Encrypt(dbInfo.Password)),
                 new XElement("BackupSettings",
-                    new XElement("StartTime", databaseInfo.StartTime.ToString())));
+                    new XElement("StartTime", dbInfo.StartTime.ToString()),
+                    new XElement("AddUseDatabase", dbInfo.AddUseDatabase.ToString())));
             document.Add(newDatabaseNode);
             document.Save(ConfigurationHandler.DB_CONFIG_FILE);
         }
@@ -178,6 +211,7 @@ namespace MySQLBackup.Application.Config
                 dbInfo.Password = EncryptionHelper.Decrypt(databaseNode.Element("Password").Value);
                 XElement backupSettingsNode = databaseNode.Element("BackupSettings");
                 dbInfo.StartTimeString = backupSettingsNode.Element("StartTime").Value;
+                dbInfo.AddUseDatabase = backupSettingsNode.Element("AddUseDatabase").Value.ToLower().Equals("true");
             }
             return dbInfo;
         }

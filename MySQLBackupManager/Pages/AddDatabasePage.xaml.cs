@@ -49,6 +49,7 @@ namespace MySQLBackupManager.Pages
             dbInfo.User = userTextBox.Text;
             dbInfo.Password = passwordTextBox.Password;
             dbInfo.StartTimeString = startTime.Text;
+            dbInfo.AddUseDatabase = useDatabaseCheck.IsChecked.Value;
             databasesViewModel.addDatabase(dbInfo);
 
             ResetTextBoxfields();
@@ -68,6 +69,7 @@ namespace MySQLBackupManager.Pages
             userTextBox.Text = "";
             passwordTextBox.Password = "";
             startTime.Text = "00:00";
+            useDatabaseCheck.IsChecked = false;
         }
     }
 }

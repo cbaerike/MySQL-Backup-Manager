@@ -16,6 +16,7 @@ namespace MySQLBackup.Application.Model
         private string password;
         private string databaseName;
         private TimeSpan startTime;
+        private bool addUseDatabase;
 
         /// <summary>
         /// Gets or sets the database identifier.
@@ -181,6 +182,7 @@ namespace MySQLBackup.Application.Model
                 if (TimeSpan.TryParse(value, out tmp))
                 {
                     this.StartTime = tmp;
+                    NotifyPropertyChanged();
                 }
             }
         }
@@ -194,6 +196,19 @@ namespace MySQLBackup.Application.Model
         public override string ToString()
         {
             return DatabaseName;
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the "Use Database" statement is added in the dump file.
+        /// </summary>
+        public bool AddUseDatabase
+        {
+            get { return this.addUseDatabase; }
+            set
+            {
+                this.addUseDatabase = value;
+                NotifyPropertyChanged();
+            }
         }
 
         #region IPropertyChanged implementation

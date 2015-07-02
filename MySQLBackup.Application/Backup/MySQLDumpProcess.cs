@@ -36,13 +36,24 @@ namespace MySQLBackup.Application.Backup
                 Process process = null;
                 if (!isServerDown)
                 {
+                    string dumpOptions = " ";
+                    if (dbInfo.AddUseDatabase)
+                    {
+                        dumpOptions += "--databases ";
+                    };
+                    dumpOptions += string.Format(@"""{0}"" -u{1} -p{2} -h{3} -P{4} --add-drop-database --add-drop-table --add-locks --comments --create-options --dump-date --lock-tables"
+                       , dbInfo.DatabaseName
+                       , dbInfo.User
+                       , dbInfo.Password
+                       , dbInfo.HostNoPort
+                       , dbInfo.Port);
                     ProcessStartInfo psi = new ProcessStartInfo();
                     psi.FileName = "mysqldump";
                     psi.RedirectStandardInput = false;
                     psi.RedirectStandardOutput = true;
                     psi.RedirectStandardError = true;
                     psi.StandardOutputEncoding = Encoding.UTF8;
-                    psi.Arguments = string.Format(@"-u{0} -p{1} -h{2} -P{3} --add-drop-database --add-drop-table --add-locks --comments --create-options --dump-date --lock-tables --databases ""{4}""", dbInfo.User, dbInfo.Password, dbInfo.HostNoPort, dbInfo.Port, dbInfo.DatabaseName);
+                    psi.Arguments = dumpOptions;
                     psi.UseShellExecute = false;
                     psi.CreateNoWindow = true;
 
