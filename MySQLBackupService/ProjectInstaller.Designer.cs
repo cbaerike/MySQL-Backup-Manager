@@ -39,8 +39,7 @@
             // 
             // serviceInstaller1
             // 
-            this.serviceInstaller1.Description = "Lightweight Backup Service for taking automatic database backups of your MySQL da" +
-    "tabases";
+            this.serviceInstaller1.Description = "Lightweight Backup Service for taking automatic database backups of your MySQL databases, version " + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString(3);
             this.serviceInstaller1.DisplayName = "MySQL Backup Service";
             this.serviceInstaller1.ServiceName = "MySQL Backup Service";
             this.serviceInstaller1.StartType = System.ServiceProcess.ServiceStartMode.Automatic;
