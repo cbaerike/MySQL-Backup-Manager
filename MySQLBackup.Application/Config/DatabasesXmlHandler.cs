@@ -56,6 +56,7 @@ namespace MySQLBackup.Application.Config
                             XElement backupSettingsNode = databaseNode.Element("BackupSettings");
                             dbInfo.StartTimeString = backupSettingsNode.Element("StartTime").Value;
                             dbInfo.AddUseDatabase = true;
+                            dbInfo.IncludeRoutines = false;
                             databaseList.Add(dbInfo);
                         }
                         //Then delete the old file and create a new one.
@@ -86,6 +87,7 @@ namespace MySQLBackup.Application.Config
                                 XElement backupSettingsNode = databaseNode.Element("BackupSettings");
                                 dbInfo.StartTimeString = backupSettingsNode.Element("StartTime").Value;
                                 dbInfo.AddUseDatabase = true;
+                                dbInfo.IncludeRoutines = false;
                                 databaseList.Add(dbInfo);
                             }
                         }
@@ -125,7 +127,8 @@ namespace MySQLBackup.Application.Config
                 new XElement("Password", EncryptionHelper.Encrypt(dbInfo.Password)),
                 new XElement("BackupSettings",
                     new XElement("StartTime", dbInfo.StartTime.ToString()),
-                    new XElement("AddUseDatabase", dbInfo.AddUseDatabase.ToString())));
+                    new XElement("AddUseDatabase", dbInfo.AddUseDatabase.ToString()),
+                    new XElement("IncludeRoutines", dbInfo.IncludeRoutines.ToString())));
             document.Add(newDatabaseNode);
             document.Save(ConfigurationHandler.DB_CONFIG_FILE);
         }
@@ -212,6 +215,7 @@ namespace MySQLBackup.Application.Config
                 XElement backupSettingsNode = databaseNode.Element("BackupSettings");
                 dbInfo.StartTimeString = backupSettingsNode.Element("StartTime").Value;
                 dbInfo.AddUseDatabase = backupSettingsNode.Element("AddUseDatabase").Value.ToLower().Equals("true");
+                dbInfo.IncludeRoutines = backupSettingsNode.Element("IncludeRoutines").Value.ToLower().Equals("true");
             }
             return dbInfo;
         }

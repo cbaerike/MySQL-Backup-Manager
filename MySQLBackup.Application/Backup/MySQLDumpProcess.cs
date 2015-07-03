@@ -47,6 +47,10 @@ namespace MySQLBackup.Application.Backup
                        , dbInfo.Password
                        , dbInfo.HostNoPort
                        , dbInfo.Port);
+                    if (dbInfo.IncludeRoutines)
+                    {
+                        dumpOptions += " --routines";
+                    }
                     ProcessStartInfo psi = new ProcessStartInfo();
                     psi.FileName = "mysqldump";
                     psi.RedirectStandardInput = false;

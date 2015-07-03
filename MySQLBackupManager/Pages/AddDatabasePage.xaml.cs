@@ -50,6 +50,7 @@ namespace MySQLBackupManager.Pages
             dbInfo.Password = passwordTextBox.Password;
             dbInfo.StartTimeString = startTime.Text;
             dbInfo.AddUseDatabase = useDatabaseCheck.IsChecked.Value;
+            dbInfo.IncludeRoutines = includeRoutinesCheck.IsChecked.Value;
             databasesViewModel.addDatabase(dbInfo);
 
             ResetTextBoxfields();
@@ -70,6 +71,7 @@ namespace MySQLBackupManager.Pages
             passwordTextBox.Password = "";
             startTime.Text = "00:00";
             useDatabaseCheck.IsChecked = false;
+            includeRoutinesCheck.IsChecked = true;
         }
     }
 }

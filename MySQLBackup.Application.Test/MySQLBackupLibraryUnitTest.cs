@@ -69,6 +69,7 @@ namespace MySQLBackup.ApplicationTest
             dbInfo.DatabaseName = "test_database";
             dbInfo.StartTime = new TimeSpan(4, 30, 0);
             dbInfo.AddUseDatabase = false;
+            dbInfo.IncludeRoutines = true;
 
             dbHandler.InsertDatabaseNode(dbInfo);
 
@@ -96,6 +97,7 @@ namespace MySQLBackup.ApplicationTest
             dbInfo.DatabaseName = "TestDatabase";
             dbInfo.StartTime = new TimeSpan(4, 30, 0);
             dbInfo.AddUseDatabase = false;
+            dbInfo.IncludeRoutines = true;
 
             dbHandler.InsertDatabaseNode(dbInfo);
             dbHandler.RemoveDatabaseNode(dbInfo.ID);
@@ -120,6 +122,7 @@ namespace MySQLBackup.ApplicationTest
             dbInfo.DatabaseName = "TestDatabase";
             dbInfo.StartTime = new TimeSpan(4, 30, 0);
             dbInfo.AddUseDatabase = false;
+            dbInfo.IncludeRoutines = true;
 
             dbHandler.InsertDatabaseNode(dbInfo);
 
@@ -142,6 +145,7 @@ namespace MySQLBackup.ApplicationTest
             dbInfo.DatabaseName = "TestDatabase";
             dbInfo.StartTime = new TimeSpan(4, 30, 0);
             dbInfo.AddUseDatabase = false;
+            dbInfo.IncludeRoutines = true;
 
             dbHandler.InsertDatabaseNode(dbInfo);
 
@@ -262,6 +266,7 @@ namespace MySQLBackup.ApplicationTest
             dbInfo.DatabaseName = "TestDatabase";
             dbInfo.StartTime = new TimeSpan(4, 30, 0);
             dbInfo.AddUseDatabase = false;
+            dbInfo.IncludeRoutines = true;
 
             dbHandler.InsertDatabaseNode(dbInfo);
             dbInfo.ID = Guid.NewGuid();

@@ -17,6 +17,7 @@ namespace MySQLBackup.Application.Model
         private string databaseName;
         private TimeSpan startTime;
         private bool addUseDatabase;
+        private bool includeRoutines;
 
         /// <summary>
         /// Gets or sets the database identifier.
@@ -207,6 +208,19 @@ namespace MySQLBackup.Application.Model
             set
             {
                 this.addUseDatabase = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether database routines (table functions and stored procedures) are included in the backup.
+        /// </summary>
+        public bool IncludeRoutines
+        {
+            get { return this.includeRoutines; }
+            set
+            {
+                this.includeRoutines = value;
                 NotifyPropertyChanged();
             }
         }
