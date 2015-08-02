@@ -64,13 +64,17 @@ namespace MySQLBackup.Application.Backup
                     try
                     {
                         process = Process.Start(psi);
-                        string output = process.StandardOutput.ReadToEnd();
+                        //string output = process.StandardOutput.ReadToEnd();
                         string error = process.StandardError.ReadToEnd();
                         if (!ErrorHandler.HasErrorOccured(error, ref this.isServerDown))
                         {
-                            this.WriteBackupFile(dbInfo.HostNoPort, dbInfo.DatabaseName, output);
-                            success = true;
-                            new LogHandler().LogMessage(LogHandler.MessageType.INFO, "Backup created of the database " + dbInfo.DatabaseName);
+                            string backupLocation;
+                            if (CreateBackupLocation(dbInfo.HostNoPort, dbInfo.DatabaseName, out backupLocation))
+                            {
+                                this.WriteBackupFile(backupLocation, dbInfo.DatabaseName, process.StandardOutput);
+                                success = true;
+                                new LogHandler().LogMessage(LogHandler.MessageType.INFO, "Backup created of the database " + dbInfo.DatabaseName);
+                            }
                         }
                     }
                     catch (Exception ex)
@@ -95,14 +99,16 @@ namespace MySQLBackup.Application.Backup
         }
 
         /// <summary>
-        /// Write output to a backup file for the specified database.
+        /// Creates the backup location.
         /// </summary>
+        /// <param name="hostName">Name of the host.</param>
         /// <param name="databaseName">Name of the database.</param>
-        /// <param name="output">The output.</param>
-        private void WriteBackupFile(string hostName, string databaseName, string output)
+        /// <param name="backupLocation">The backup location.</param>
+        /// <returns></returns>
+        private bool CreateBackupLocation(string hostName, string databaseName, out string backupLocation)
         {
             bool error = false;
-            string backupLocation = ConfigurationXmlHandler.GetBackupLocation() + hostName + @"\" + databaseName + @"\";
+            backupLocation = ConfigurationXmlHandler.GetBackupLocation() + hostName + @"\" + databaseName + @"\";
             if (!Directory.Exists(backupLocation))
             {
                 try
@@ -115,15 +121,27 @@ namespace MySQLBackup.Application.Backup
                     new LogHandler().LogMessage(LogHandler.MessageType.ERROR, "Cannot create directory " + backupLocation + Environment.NewLine + ex.ToString());
                 }
             }
-            if (!error)
+            return !error;
+        }
+
+        /// <summary>
+        /// Write output to a backup file for the specified database.
+        /// </summary>
+        /// <param name="databaseName">Name of the database.</param>
+        /// <param name="output">The output.</param>
+        private void WriteBackupFile(string backupLocation, string databaseName, StreamReader output)
+        {
+            DateTime dateTime = DateTime.Now;
+            String filename = backupLocation + string.Format("{0}_{1}-{2}-{3}_{4}.dump", databaseName, dateTime.Day, dateTime.Month, dateTime.Year, dateTime.ToString("HHmm"));
+            using (StreamWriter writer = new StreamWriter(filename, false, Encoding.UTF8))
             {
-                DateTime dateTime = DateTime.Now;
-                String filename = backupLocation + string.Format("{0}_{1}-{2}-{3}_{4}.dump", databaseName, dateTime.Day, dateTime.Month, dateTime.Year, dateTime.ToString("HHmm"));
-                using (StreamWriter writer = new StreamWriter(filename, false, Encoding.UTF8))
+                writer.AutoFlush = true;
+                string tmp;
+                while (null != (tmp = output.ReadLine()))
                 {
-                    writer.WriteLine(output);
-                    writer.Close();
+                    writer.WriteLine(tmp);
                 }
+                writer.Close();
             }
         }
     }
