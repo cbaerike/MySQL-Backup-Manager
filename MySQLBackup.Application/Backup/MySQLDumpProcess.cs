@@ -41,7 +41,7 @@ namespace MySQLBackup.Application.Backup
                     {
                         dumpOptions += "--databases ";
                     };
-                    dumpOptions += string.Format(@"""{0}"" -u{1} -p{2} -h{3} -P{4} --add-drop-database --add-drop-table --add-locks --comments --create-options --dump-date --lock-tables"
+                    dumpOptions += string.Format(@"""{0}"" -u{1} -p{2} -h{3} -P{4} --add-drop-database --add-drop-table --add-locks --comments --create-options --dump-date --lock-tables --hex-blob"
                        , dbInfo.DatabaseName
                        , dbInfo.User
                        , dbInfo.Password
